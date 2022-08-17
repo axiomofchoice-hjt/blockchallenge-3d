@@ -22,7 +22,7 @@ var Renderer = {
 
         // 点光源
         var point = new THREE.PointLight(0xffffff);
-        point.position.set(400, 200, 300); // 点光源位置
+        point.position.set(0, 500, 500); // 点光源位置
         scene.add(point); // 点光源添加到场景中
 
         // 环境光

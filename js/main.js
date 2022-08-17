@@ -22,9 +22,19 @@ let mainLoop = () => {
 };
 mainLoop();
 
+
+
 function clickEvent(event) {
-    // print(event.clientX, event.clientY);
-    box1.flip(0.5);
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / width()) * 2 - 1;
+    mouse.y = -(event.clientY / height()) * 2 + 1;
+    raycaster.setFromCamera(mouse, Renderer.camera);
+    var intersects = raycaster.intersectObjects(Renderer.scene.children);
+    if (intersects.length) {
+        var box = intersects[0].object;
+        box.flip(0.2);
+    }
 }
 
 canvas().addEventListener('click', clickEvent, false);

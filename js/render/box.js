@@ -17,6 +17,13 @@ class Box extends THREE.Mesh {
             speed: 0
         };
     }
+    setMaterial(material) {
+        if (Math.abs(this.animateRY.degree - Math.PI) > 1) {
+            this.material[4] = material;
+        } else {
+            this.material[5] = material;
+        }
+    }
     flip(time) {
         if (this.animateRY.speed === 0) {
             if (Math.abs(this.rotation.y) <= 1) {
@@ -46,7 +53,6 @@ class Box extends THREE.Mesh {
             this.animateRY.speed = 0;
         } else {
             this.rotation.y += sgn(this.animateRY.degree - this.rotation.y) * delta * this.animateRY.speed;
-            print(this.rotation.y);
         }
     }
     update(delta) {
