@@ -1,19 +1,22 @@
-class Renderer {
-    constructor() {
-        this.renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
-        this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setSize(width(), height());
-        this.renderer.setClearColor(0xADF8FF, 1);
-        this.camera = this._getCamera();
-        this.scene = this._getScene();
-    }
+var Renderer = {
+    needRender: false,
+    _getRenderer() {
+        let renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width(), height());
+        renderer.setClearColor(0xADF8FF, 1);
+
+        return renderer;
+    },
     _getCamera() {
         let camera = new THREE.PerspectiveCamera(75, width() / height(), 0.1, 1000);
-        camera.position.set(200, 300, 200);
+        camera.position.set(0, 0, 500);
+        camera.up.set(0, 1, 0);
         camera.lookAt(0, 0, 0);
 
+        // print(camera);
         return camera;
-    }
+    },
     _getScene() {
         let scene = new THREE.Scene();
 
@@ -27,20 +30,32 @@ class Renderer {
         scene.add(ambient);
 
         return scene;
-    }
+    },
     add(mesh) {
         this.scene.add(mesh);
-    }
+    },
     get() {
         return this.renderer;
-    }
-    update() {
+    },
+    fitWindow() {
         this.renderer.setSize(width(), height());
 
         this.camera.aspect = width() / height();
         this.camera.updateProjectionMatrix();
-    }
+
+        this.needRender = true;
+    },
     render() {
-        this.renderer.render(this.scene, this.camera);
+        if (this.needRender) {
+            this.renderer.render(this.scene, this.camera);
+            this.needRender = false;
+        }
+    },
+    init() {
+        this.renderer = this._getRenderer();
+        this.camera = this._getCamera();
+        this.scene = this._getScene();
     }
-}
+};
+
+Renderer.init();

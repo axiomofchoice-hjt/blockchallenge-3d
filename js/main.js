@@ -1,20 +1,30 @@
-var renderer = new Renderer();
-
 // 创建网格模型
-var box = new Box(100, 100, 100);
-
-renderer.add(box.get()); // 网格模型添加到场景中
+var box1 = new Box(100, 100, 40);
+box1.position.set(-100, 0, 0);
+var box2 = new Box(100, 100, 40);
+box2.position.set(100, 0, 0);
 
 // 执行渲染操作
-renderer.render();
 
+Renderer.fitWindow();
 window.onresize = () => {
-    renderer.update();
-    renderer.render();
+    Renderer.fitWindow();
 };
 
-function click(event) {
-    console.log(event.clientX, event.clientY);
+
+let clock = new THREE.Clock();
+let mainLoop = () => {
+    requestAnimationFrame(mainLoop);
+    let delta = clock.getDelta();
+    box1.update(delta);
+    box2.update(delta);
+    Renderer.render();
+};
+mainLoop();
+
+function clickEvent(event) {
+    // print(event.clientX, event.clientY);
+    box1.flip(0.5);
 }
 
-canvas().addEventListener('click', click, false);
+canvas().addEventListener('click', clickEvent, false);

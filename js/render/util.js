@@ -9,3 +9,11 @@ function height() {
 function canvas() {
     return document.getElementById('canvas');
 }
+
+function print() {
+    console.log(...arguments);
+}
+
+function sgn(x) {
+    return x > 0 ? 1 : x < 0 ? -1 : 0;
+}
