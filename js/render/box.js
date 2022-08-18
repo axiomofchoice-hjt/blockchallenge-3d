@@ -7,55 +7,71 @@ class Box extends THREE.Mesh {
                 Material.solid(),
                 Material.solid(),
                 Material.solid(),
-                Material.text('233', '#000000', '#ffffff'),
+                Material.solid(),
                 Material.solid(),
             ]
         );
         Renderer.add(this);
-        this.animateRY = {
-            degree: 0,
-            speed: 0
-        };
+        this.flipped = 0;
+        this.flipSpeed = 0;
+        this.opacityFlipped = 1;
+        this.opacitySpeed = 0;
     }
-    setMaterial(material) {
-        if (Math.abs(this.animateRY.degree - Math.PI) > 1) {
-            this.material[4] = material;
-        } else {
-            this.material[5] = material;
+    setOpacity(opacity) {
+        Renderer.needRender = true;
+        for (let i of this.material) {
+            i.opacity = opacity;
         }
     }
-    flip(time) {
-        if (this.animateRY.speed === 0) {
-            if (Math.abs(this.rotation.y) <= 1) {
-                this.animateRY.degree = Math.PI;
-                this.rotation.y = Math.PI * 2;
-            } else {
-                this.animateRY.degree = this.rotation.y - Math.PI;
-            }
-        } else {
-            this.animateRY.degree =
-                Math.abs(this.animateRY.degree - Math.PI) > 1
-                    ? Math.PI
-                    : this.animateRY.degree < Math.PI
-                        ? 0
-                        : Math.PI * 2;
-        }
-        this.animateRY.speed = Math.PI / time;
+    getOpacity() {
+        return this.material[0].opacity;
     }
-    rotateAnimate(delta) {
-        if (this.animateRY.speed === 0) {
+    setFrontMaterial(material) {
+        Renderer.needRender = true;
+        material.opacity = this.getOpacity();
+        this.material[4] = material;
+    }
+    setBackMaterial(material) {
+        Renderer.needRender = true;
+        material.opacity = this.getOpacity();
+        this.material[5] = material;
+    }
+    opacityFlip(time = 0.2) {
+        this.opacityFlipped ^= 1;
+        this.opacitySpeed = 1 / time;
+    }
+    opacityAnimate(delta) {
+        if (this.opacitySpeed === 0) {
             return;
         }
         Renderer.needRender = true;
 
-        if (this.animateRY.speed * delta >= Math.abs(this.animateRY.degree - this.rotation.y)) {
-            this.rotation.y = this.animateRY.degree;
-            this.animateRY.speed = 0;
+        if (this.opacitySpeed * delta >= Math.abs(this.opacityFlipped - this.getOpacity())) {
+            this.setOpacity(this.opacityFlipped);
+            this.opacitySpeed = 0;
         } else {
-            this.rotation.y += sgn(this.animateRY.degree - this.rotation.y) * delta * this.animateRY.speed;
+            this.setOpacity(this.getOpacity() + sgn(this.opacityFlipped - this.getOpacity()) * delta * this.opacitySpeed);
+        }
+    }
+    flip(time = 0.2) {
+        this.flipped ^= 1;
+        this.flipSpeed = Math.PI / time;
+    }
+    rotateAnimate(delta) {
+        if (this.flipSpeed === 0) {
+            return;
+        }
+        Renderer.needRender = true;
+
+        if (this.flipSpeed * delta >= Math.abs(this.flipped * Math.PI - this.rotation.y)) {
+            this.rotation.y = this.flipped * Math.PI;
+            this.flipSpeed = 0;
+        } else {
+            this.rotation.y += sgn(this.flipped * Math.PI - this.rotation.y) * delta * this.flipSpeed;
         }
     }
     update(delta) {
         this.rotateAnimate(delta);
+        this.opacityAnimate(delta);
     }
 }
