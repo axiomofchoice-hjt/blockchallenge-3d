@@ -1,3 +1,6 @@
+import * as THREE from 'three';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
+
 class Material extends THREE.MeshLambertMaterial {
     static solid(color = '#ffffff') {
         return new THREE.MeshLambertMaterial({
@@ -27,3 +30,5 @@ class Material extends THREE.MeshLambertMaterial {
         });
     }
 }
+
+export { Material };

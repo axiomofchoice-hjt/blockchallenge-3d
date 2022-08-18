@@ -1,3 +1,11 @@
+import * as THREE from 'three';
+
+import { Animation } from './ui/animation.js';
+import { Box } from './ui/box.js';
+import { Renderer } from './ui/renderer.js';
+import { Material } from './ui/material.js';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util.js';
+
 // 创建网格模型
 var boxes = [];
 const n = 4, m = 5, zm = 120;

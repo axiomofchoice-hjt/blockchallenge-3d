@@ -1,3 +1,6 @@
+import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
+import { Renderer } from '/js/ui/renderer.js';
+
 class Animation {
     constructor(getter, setter) {
         this.speed = 0;
@@ -22,3 +25,5 @@ class Animation {
         }
     }
 }
+
+export { Animation };

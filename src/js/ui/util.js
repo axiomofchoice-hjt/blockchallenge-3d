@@ -39,3 +39,5 @@ function rangeMatrix(n, m) {
         }
     };
 }
+
+export { width, height, canvas, print, sgn, range, rangeMatrix };

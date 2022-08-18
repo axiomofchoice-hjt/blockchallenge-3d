@@ -1,7 +1,11 @@
+import * as THREE from 'three';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
+
 var Renderer = {
     needRender: false,
     _getRenderer() {
         let renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
+
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(width(), height());
         renderer.setClearColor(0xADF8FF, 1);
@@ -59,3 +63,5 @@ var Renderer = {
 };
 
 Renderer.init();
+
+export { Renderer };

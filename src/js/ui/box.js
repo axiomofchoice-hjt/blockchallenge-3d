@@ -1,3 +1,9 @@
+import * as THREE from 'three';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
+import { Animation } from '/js/ui/animation.js';
+import { Material } from '/js/ui/material.js';
+import { Renderer } from '/js/ui/renderer.js';
+
 class Box extends THREE.Mesh {
     constructor(x, y, z) {
         super(
@@ -45,3 +51,5 @@ class Box extends THREE.Mesh {
         this.opacityAnimation.update(delta);
     }
 }
+
+export { Box };
