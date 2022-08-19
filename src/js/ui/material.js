@@ -18,9 +18,9 @@ class Material extends THREE.MeshLambertMaterial {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        ctx.fillStyle = bgColor;
+        ctx.fillStyle = '#' + bgColor.getHexString();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = color;
+        ctx.fillStyle = '#' + color.getHexString();
         ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
 
         return new THREE.MeshLambertMaterial({

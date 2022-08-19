@@ -6,7 +6,6 @@ var Renderer = {
     _getRenderer() {
         let renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
 
-        renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(width(), height());
         renderer.setClearColor(0xADF8FF, 1);
 
@@ -43,6 +42,7 @@ var Renderer = {
     },
     fitWindow() {
         this.renderer.setSize(width(), height());
+        this.renderer.setPixelRatio(window.devicePixelRatio);
 
         this.camera.aspect = width() / height();
         this.camera.updateProjectionMatrix();

@@ -4,7 +4,6 @@ import { Box } from './ui/box.js';
 import { Renderer } from './ui/renderer.js';
 import { Material } from './ui/material.js';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util.js';
-import gsap from 'gsap';
 import { Animation } from './ui/animation.js';
 
 // 创建网格模型
@@ -14,9 +13,12 @@ for (let [i, j] of rangeMatrix(n, m)) {
     // print(i, j);
     let box = new Box(100, 100, 10);
     box.position.set((j - m / 2 + 0.5) * zm, -(i - n / 2 + 0.5) * zm, 0);
-    box.setFrontMaterial(Material.text(i * m + j, '#000000', '#ffffff'));
+    box.frontMaterial.text = i * m + j;
     box.flipped = 0;
     box.flipAnimation = new Animation(box.rotation, 'y', Math.PI / 0.2);
+    box.integerAnimation = new Animation(box.frontMaterial, 'text', 20);
+    // box.frontMaterial.bgColorAnimate('#000000');
+    // print(box);
     // box.flipAnimation = new Animation(box, 'materialOpacity', 1 / 0.2);
 }
 
@@ -29,9 +31,7 @@ for (let [i, j] of rangeMatrix(n, m)) {
 // 执行渲染操作
 
 Renderer.fitWindow();
-window.onresize = () => {
-    Renderer.fitWindow();
-};
+window.addEventListener('resize', () => Renderer.fitWindow(), false);
 
 let clock = new THREE.Clock();
 let mainLoop = () => {
@@ -57,7 +57,9 @@ function clickEvent(event) {
         var box = intersects[0].object;
         // box.flipAnimation.load(box.flipped);
         box.flipped ^= 1;
-        box.flipAnimation.load(box.flipped * Math.PI);
+        // box.flipAnimation.load(box.flipped * Math.PI);
+        // box.integerAnimation.load(100);
+        box.frontMaterial.bgColorAnimate('#000000');
     }
 }
 
