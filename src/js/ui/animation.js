@@ -1,29 +1,24 @@
-import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
-import { Renderer } from '/js/ui/renderer.js';
-
+import gsap from "gsap";
+import { Renderer } from "./renderer";
 class Animation {
-    constructor(getter, setter) {
-        this.speed = 0;
-        this.getter = getter;
-        this.setter = setter;
+    constructor(object, attr, speed) {
+        this.object = object;
+        this.attr = attr;
+        this.speed = speed;
+        this.tween = null;
     }
-    push(to, speed) {
-        this.to = to;
-        this.speed = speed * sgn(to - this.getter());
-    }
-    update(delta) {
-        if (this.speed === 0) {
-            return;
+    load(to) {
+        if (this.tween !== null) {
+            this.tween.kill();
         }
-
-        Renderer.needRender = true;
-        if (Math.abs(this.getter() - this.to) <= delta * Math.abs(this.speed)) {
-            this.setter(this.to);
-            this.speed = 0;
-        } else {
-            this.setter(this.getter() + delta * this.speed);
-        }
+        let vars = {};
+        vars[this.attr] = to;
+        vars.duration = Math.abs(this.object[this.attr] - to) / this.speed;
+        vars.onUpdate = () => {
+            Renderer.needRender = true;
+        };
+        this.tween = gsap.to(this.object, vars
+        );
     }
 }
-
 export { Animation };

@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 
-import { Animation } from './ui/animation.js';
 import { Box } from './ui/box.js';
 import { Renderer } from './ui/renderer.js';
 import { Material } from './ui/material.js';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util.js';
+import gsap from 'gsap';
+import { Animation } from './ui/animation.js';
 
 // 创建网格模型
 var boxes = [];
@@ -15,6 +16,8 @@ for (let [i, j] of rangeMatrix(n, m)) {
     box.position.set((j - m / 2 + 0.5) * zm, -(i - n / 2 + 0.5) * zm, 0);
     box.setFrontMaterial(Material.text(i * m + j, '#000000', '#ffffff'));
     box.flipped = 0;
+    box.flipAnimation = new Animation(box.rotation, 'y', Math.PI / 0.2);
+    // box.flipAnimation = new Animation(box, 'materialOpacity', 1 / 0.2);
 }
 
 // box1.position.set(-100, 0, 0);
@@ -52,9 +55,9 @@ function clickEvent(event) {
     var intersects = raycaster.intersectObjects(Renderer.scene.children);
     if (intersects.length) {
         var box = intersects[0].object;
+        // box.flipAnimation.load(box.flipped);
         box.flipped ^= 1;
-        box.rotateAnimation.push(Math.PI * box.flipped, Math.PI / 0.2);
-        // box.opacityAnimation.push(0, 1 / 0.2);
+        box.flipAnimation.load(box.flipped * Math.PI);
     }
 }
 

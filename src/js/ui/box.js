@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
-import { Animation } from '/js/ui/animation.js';
 import { Material } from '/js/ui/material.js';
 import { Renderer } from '/js/ui/renderer.js';
 
@@ -18,19 +17,12 @@ class Box extends THREE.Mesh {
             ]
         );
         Renderer.add(this);
-        this.rotateAnimation = new Animation(
-            () => this.rotation.y,
-            (x) => { this.rotation.y = x; }
-        );
-        this.opacityAnimation = new Animation(
-            () => this.getOpacity(),
-            (x) => { this.setOpacity(x); }
-        );
+        this.flipAnimation = null;
     }
-    getOpacity() {
+    get materialOpacity() {
         return this.material[0].opacity;
     }
-    setOpacity(opacity) {
+    set materialOpacity(opacity) {
         Renderer.needRender = true;
         for (let i of this.material) {
             i.opacity = opacity;
@@ -38,17 +30,15 @@ class Box extends THREE.Mesh {
     }
     setFrontMaterial(material) {
         Renderer.needRender = true;
-        material.opacity = this.getOpacity();
+        material.opacity = this.materialOpacity;
         this.material[4] = material;
     }
     setBackMaterial(material) {
         Renderer.needRender = true;
-        material.opacity = this.getOpacity();
+        material.opacity = this.materialOpacity;
         this.material[5] = material;
     }
     update(delta) {
-        this.rotateAnimation.update(delta);
-        this.opacityAnimation.update(delta);
     }
 }
 
