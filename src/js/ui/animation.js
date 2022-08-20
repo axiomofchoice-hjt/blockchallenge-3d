@@ -53,7 +53,7 @@ class Animation {
         };
         vars.onComplete = args.onComplete;
         vars.ease = args.ease;
-        print(vars);
+        // print(vars);
         this.tween = gsap.to(this.object, vars
         );
     }

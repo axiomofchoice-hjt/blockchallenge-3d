@@ -5,6 +5,13 @@ import { Renderer } from './ui/renderer.js';
 import { Material } from './ui/material.js';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util.js';
 import { Animation } from './ui/animation.js';
+import { Header } from './ui/header';
+import { Footer } from './ui/footer.js';
+
+Header.init();
+Header.setText("23333");
+Footer.init();
+Footer.setTask(0, 2, 3, '#000');
 
 // 创建网格模型
 var boxes = [];
@@ -60,7 +67,7 @@ function clickEvent(event) {
         // box.flipAnimation.load(box.flipped * Math.PI);
         // box.integerAnimation.load(100);
         // box.frontMaterial.bgColorAnimate('#000000');
-        box.frontBgColorAnimate('#000', { duration: 1 });
+        box.frontBgColorAnimate('#0ff', { duration: 1 });
     }
 }
 

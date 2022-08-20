@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from './util.js';
 
 var Renderer = {
     needRender: false,
@@ -25,11 +25,11 @@ var Renderer = {
 
         // 点光源
         var point = new THREE.PointLight(0xffffff);
-        point.position.set(0, 500, 500); // 点光源位置
+        point.position.set(0, 1500, 500); // 点光源位置
         scene.add(point); // 点光源添加到场景中
 
         // 环境光
-        var ambient = new THREE.AmbientLight(0x444444);
+        var ambient = new THREE.AmbientLight(0x909090);
         scene.add(ambient);
 
         return scene;
