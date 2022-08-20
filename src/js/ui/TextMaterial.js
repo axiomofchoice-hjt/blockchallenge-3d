@@ -3,25 +3,31 @@ import { Material } from './material';
 import { Animation } from './animation';
 import { print } from './util';
 
-class Color extends THREE.Color {
-    constructor(color, speed) {
-        super(color);
-        this.copy(color);
-        this.animation = new Animation(this, ['r', 'g', 'b'], speed);
-    }
-    animate(color, onUpdate) {
+class Color {
+    constructor(color, ctx) {
         color = new THREE.Color(color);
-        print(color);
-        this.animation.load([color.r, color.g, color.b], onUpdate);
+        this._ctx = ctx;
+        this._r = color.r;
+        this._g = color.g;
+        this._b = color.b;
+    }
+    get r() { return this._r; }
+    get g() { return this._g; }
+    get b() { return this._b; }
+    set r(r) { this._r = r; this._ctx.changed = true; }
+    set g(g) { this._g = g; this._ctx.changed = true; }
+    set b(b) { this._b = b; this._ctx.changed = true; }
+    get() {
+        return new THREE.Color(this._r, this._g, this._b);
     }
 }
 
 class TextMaterial {
     constructor(text = '', color = '#000000', bgColor = '#ffffff') {
         this.changed = true;
-        this.text = text;
-        this.color = new Color(new THREE.Color(color), 1);
-        this.bgColor = new Color(new THREE.Color(bgColor), 1);
+        this._text = text;
+        this._color = new Color(color, this);
+        this._bgColor = new Color(bgColor, this);
     }
     get text() {
         return this._text;
@@ -34,17 +40,15 @@ class TextMaterial {
         }
         this.changed = true;
     }
-    colorAnimate(color) {
-        this.color.animate(color, () => { this.changed = true; });
-    }
-    bgColorAnimate(bgColor) {
-        this.bgColor.animate(bgColor, () => { this.changed = true; });
-    }
+    get color() { return this._color; }
+    get bgColor() { return this._bgColor; }
+    set color(color) { this._color = new Color(color, this); this.changed = true; }
+    set bgColor(bgColor) { this._bgColor = new Color(bgColor, this); this.changed = true; }
     get() {
         return Material.text(
             this._text,
-            new THREE.Color(this.color.r, this.color.g, this.color.b),
-            new THREE.Color(this.bgColor.r, this.bgColor.g, this.bgColor.b)
+            this._color.get(),
+            this._bgColor.get()
         );
     }
 }

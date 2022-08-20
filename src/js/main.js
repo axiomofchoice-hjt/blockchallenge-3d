@@ -14,12 +14,12 @@ for (let [i, j] of rangeMatrix(n, m)) {
     let box = new Box(100, 100, 10);
     box.position.set((j - m / 2 + 0.5) * zm, -(i - n / 2 + 0.5) * zm, 0);
     box.frontMaterial.text = i * m + j;
-    box.flipped = 0;
-    box.flipAnimation = new Animation(box.rotation, 'y', Math.PI / 0.2);
-    box.integerAnimation = new Animation(box.frontMaterial, 'text', 20);
-    // box.frontMaterial.bgColorAnimate('#000000');
+    // box.flipped = 0;
+    // box.flipAnimation = new Animation(box.rotation, 'y', Math.PI / 0.2);
+    // box.integerAnimation = new Animation(box.frontMaterial, 'text', { speed: 20, duration: 0.2 });
     // print(box);
     // box.flipAnimation = new Animation(box, 'materialOpacity', 1 / 0.2);
+    // box.colorAnimation = new Animation(box.frontMaterial.bgColor, ['r', 'g', 'b'], { duration: 1 });
 }
 
 // box1.position.set(-100, 0, 0);
@@ -59,7 +59,8 @@ function clickEvent(event) {
         box.flipped ^= 1;
         // box.flipAnimation.load(box.flipped * Math.PI);
         // box.integerAnimation.load(100);
-        box.frontMaterial.bgColorAnimate('#000000');
+        // box.frontMaterial.bgColorAnimate('#000000');
+        box.frontBgColorAnimate('#000', { duration: 1 });
     }
 }
 

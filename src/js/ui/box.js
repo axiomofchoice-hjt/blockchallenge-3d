@@ -3,6 +3,7 @@ import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/ut
 import { Material } from '/js/ui/material.js';
 import { Renderer } from '/js/ui/renderer.js';
 import { TextMaterial } from './textMaterial';
+import { Animation } from './animation';
 
 class Box extends THREE.Mesh {
     constructor(x, y, z) {
@@ -17,9 +18,9 @@ class Box extends THREE.Mesh {
                 Material.solid(),
             ]
         );
-        Renderer.add(this);
         this.frontMaterial = new TextMaterial();
         this.backMaterial = new TextMaterial();
+        Renderer.add(this);
     }
     get materialOpacity() {
         return this.material[0].opacity;
@@ -49,6 +50,25 @@ class Box extends THREE.Mesh {
             this._setBackMaterial(this.backMaterial.get());
             this.backMaterial.changed = false;
         }
+    }
+    positionAnimate(to, args) {
+        if (this._positionAnimation === undefined) {
+            this._positionAnimation = new Animation(this.position, ['x', 'y', 'z']);
+        }
+        this._positionAnimation.load(to, args);
+    }
+    flipAnimate(to, args) {
+        if (this._flipAnimation === undefined) {
+            this._flipAnimation = new Animation(this.rotation, 'y');
+        }
+        this._flipAnimation.load(to, args);
+    }
+    frontBgColorAnimate(to, args) {
+        if (this._frontBgColorAnimation === undefined) {
+            this._frontBgColorAnimation = new Animation(this.frontMaterial.bgColor, ['r', 'g', 'b']);
+        }
+        to = new THREE.Color(to);
+        this._frontBgColorAnimation.load([to.r, to.g, to.b], args);
     }
 }
 
