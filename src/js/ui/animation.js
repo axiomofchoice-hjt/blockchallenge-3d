@@ -27,6 +27,11 @@ class Animation {
             this.attr.length === to.length,
             "Animation.load fail"
         );
+        for (let i = 0; i < this.attr.length; i++) {
+            if (to[i] === null) {
+                to[i] = this.object[this.attr[i]];
+            }
+        }
         if (this.tween !== null) {
             this.tween.kill();
         }

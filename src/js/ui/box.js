@@ -1,9 +1,27 @@
 import * as THREE from 'three';
-import { width, height, canvas, print, sgn, range, rangeMatrix } from '/js/ui/util.js';
-import { Material } from '/js/ui/material.js';
-import { Renderer } from '/js/ui/renderer.js';
-import { TextMaterial } from './textMaterial';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from './util.js';
+import { Material } from './material.js';
+import { Renderer } from './renderer.js';
 import { Animation } from './animation';
+
+class Color {
+    constructor(color, onUpdate) {
+        color = new THREE.Color(color);
+        this._onUpdate = onUpdate;
+        this._r = color.r;
+        this._g = color.g;
+        this._b = color.b;
+    }
+    get r() { return this._r; }
+    get g() { return this._g; }
+    get b() { return this._b; }
+    set r(r) { this._r = r; this._onUpdate(); }
+    set g(g) { this._g = g; this._onUpdate(); }
+    set b(b) { this._b = b; this._onUpdate(); }
+    get() {
+        return new THREE.Color(this._r, this._g, this._b);
+    }
+}
 
 class Box extends THREE.Mesh {
     constructor(x, y, z) {
@@ -18,9 +36,29 @@ class Box extends THREE.Mesh {
                 Material.solid(),
             ]
         );
-        this.frontMaterial = new TextMaterial();
-        this.backMaterial = new TextMaterial();
+        this._text = '';
+        this._bgColor = new Color('#ffffff', () => {
+            this._frontChanged = true;
+            for (let i = 0; i < 6; i++) {
+                this.material[i].color = this._bgColor.get();
+            }
+        });
+        this._color = new Color('#000000', () => {
+            this._frontChanged = true;
+        });
+        this._frontChanged = true;
         Renderer.add(this);
+    }
+    get text() {
+        return this._text;
+    }
+    set text(text) {
+        if (typeof text === 'number') {
+            this._text = Math.round(text);
+        } else {
+            this._text = text;
+        }
+        this._frontChanged = true;
     }
     get materialOpacity() {
         return this.material[0].opacity;
@@ -31,24 +69,20 @@ class Box extends THREE.Mesh {
             i.opacity = opacity;
         }
     }
-    _setFrontMaterial(material) {
+    _updateFrontMaterial() {
         Renderer.needRender = true;
+        let material = Material.text(
+            this._text,
+            this._color.get(),
+            this._bgColor.get()
+        );
         material.opacity = this.materialOpacity;
         this.material[4] = material;
     }
-    _setBackMaterial(material) {
-        Renderer.needRender = true;
-        material.opacity = this.materialOpacity;
-        this.material[5] = material;
-    }
     update(delta) {
-        if (this.frontMaterial.changed) {
-            this._setFrontMaterial(this.frontMaterial.get());
-            this.frontMaterial.changed = false;
-        }
-        if (this.backMaterial.changed) {
-            this._setBackMaterial(this.backMaterial.get());
-            this.backMaterial.changed = false;
+        if (this._frontChanged) {
+            this._updateFrontMaterial();
+            this._frontChanged = false;
         }
     }
     positionAnimate(to, args) {
@@ -57,18 +91,16 @@ class Box extends THREE.Mesh {
         }
         this._positionAnimation.load(to, args);
     }
-    flipAnimate(to, args) {
-        if (this._flipAnimation === undefined) {
-            this._flipAnimation = new Animation(this.rotation, 'y');
-        }
-        this._flipAnimation.load(to, args);
-    }
-    frontBgColorAnimate(to, args) {
+    bgColorAnimate(to, args) {
         if (this._frontBgColorAnimation === undefined) {
-            this._frontBgColorAnimation = new Animation(this.frontMaterial.bgColor, ['r', 'g', 'b']);
+            this._frontBgColorAnimation = new Animation(this._bgColor, ['r', 'g', 'b']);
         }
         to = new THREE.Color(to);
         this._frontBgColorAnimation.load([to.r, to.g, to.b], args);
+    }
+    click() {
+        // this.bgColorAnimate('#0ff', { duration: 1 });
+        this.positionAnimate([null, null, 50], { duration: 1, ease: 'power1.out'});
     }
 }
 
