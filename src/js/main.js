@@ -7,43 +7,32 @@ import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util
 import { Animation } from './ui/animation.js';
 import { Header } from './ui/header';
 import { Footer } from './ui/footer.js';
+import { Grid } from './ui/Grid.js';
+
+var grid = new Grid(4, 5);
+grid.setCamera();
 
 Header.init();
 Header.setText("23333");
 Footer.init();
 Footer.setTask(0, 2, 3, '#000');
 
-print(Material.solid());
 // 创建网格模型
 var boxes = [];
 const n = 4, m = 5, zm = 120;
 for (let [i, j] of rangeMatrix(n, m)) {
     // print(i, j);
-    let box = new Box(100, 100, 10);
-    box.position.set((j - m / 2 + 0.5) * zm, -(i - n / 2 + 0.5) * zm, 0);
+    let box = grid.getBox(grid.getId(i, j), 10);
     box.text = i * m + j;
-    // box.material[0].color = new THREE.Color('#0ff');
-    // box.material[1].color = new THREE.Color('#0ff');
-    // box.material[2].color = new THREE.Color('#0ff');
-    // box.material[3].color = new THREE.Color('#0ff');
-    // box.flipped = 0;
-    // box.flipAnimation = new Animation(box.rotation, 'y', Math.PI / 0.2);
-    // box.integerAnimation = new Animation(box.frontMaterial, 'text', { speed: 20, duration: 0.2 });
-    // print(box);
-    // box.flipAnimation = new Animation(box, 'materialOpacity', 1 / 0.2);
-    // box.colorAnimation = new Animation(box.frontMaterial.bgColor, ['r', 'g', 'b'], { duration: 1 });
 }
-
-// box1.position.set(-100, 0, 0);
-// box1.setFrontMaterial(Material.text('233', '#000000', '#ffffff'));
-// print(box1);
-// var box2 = new Box(100, 100, 40);
-// box2.position.set(100, 0, 0);
 
 // 执行渲染操作
 
 Renderer.fitWindow();
-window.addEventListener('resize', () => Renderer.fitWindow(), false);
+window.addEventListener('resize', () => {
+    Renderer.fitWindow();
+    grid.setCamera();
+}, false);
 
 let clock = new THREE.Clock();
 let mainLoop = () => {

@@ -36,6 +36,7 @@ class Box extends THREE.Mesh {
                 Material.solid(),
             ]
         );
+        this.SIZE = { x, y, z };
         this._text = '';
         this._bgColor = new Color('#ffffff', () => {
             this._frontChanged = true;
@@ -92,15 +93,34 @@ class Box extends THREE.Mesh {
         this._positionAnimation.load(to, args);
     }
     bgColorAnimate(to, args) {
-        if (this._frontBgColorAnimation === undefined) {
-            this._frontBgColorAnimation = new Animation(this._bgColor, ['r', 'g', 'b']);
+        if (this._bgColorAnimation === undefined) {
+            this._bgColorAnimation = new Animation(this._bgColor, ['r', 'g', 'b']);
         }
         to = new THREE.Color(to);
-        this._frontBgColorAnimation.load([to.r, to.g, to.b], args);
+        this._bgColorAnimation.load([to.r, to.g, to.b], args);
+    }
+    scaleAnimate(to, args) {
+        if (this._scaleAnimation === undefined) {
+            this._scaleAnimation = new Animation(this.scale, ['x', 'y', 'z']);
+        }
+        this._scaleAnimation.load(to, args);
+    }
+    heightAnimation(to, args) {
+        this.positionAnimate([null, null, to / 2], args);
+        this.scaleAnimate([null, null, to / this.SIZE.z], args);
+    }
+    integerAnimate(to, args) {
+        if (this._integerAnimation === undefined) {
+            this._integerAnimation = new Animation(this, 'text');
+        }
+        this._integerAnimation.load(to, args);
     }
     click() {
-        // this.bgColorAnimate('#0ff', { duration: 1 });
-        this.positionAnimate([null, null, 50], { duration: 1, ease: 'power1.out'});
+        this.bgColorAnimate('#0ff', { duration: 1 });
+        this.positionAnimate([0, 0, null], { duration: 1, ease: 'power1.out' });
+        // this.integerAnimate(100, { duration: 1 });
+        // this.scaleAnimate([null, null, 3], { duration: 1, ease: 'power1.out' });
+        // this.heightAnimation(30, { duration: 1 });
     }
 }
 
