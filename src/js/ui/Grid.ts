@@ -1,18 +1,19 @@
 import { height, print, width } from './util';
 import { Box } from './Box';
 import { Scene } from './Scene';
+import { Vector3 } from 'three';
 
 const ZOOM = 120;
 
 class Grid {
     public n: number;
     public m: number;
-    public scene: Scene
+    public scene: Scene;
     constructor(n: number, m: number, scene: Scene) {
         this.n = n;
         this.m = m;
-        this.scene = scene
-        this.fitWindow()
+        this.scene = scene;
+        this.fitWindow();
     }
     fitWindow() {
         let bottomAngle = 75 / 2 / 180 * Math.PI;
@@ -39,19 +40,23 @@ class Grid {
     getIndex(id: number): [number, number] {
         return [Math.floor(id / this.m), id % this.m];
     }
-    getPosition(id: number) {
+    getPosition(id: number): [number, number] {
         let [i, j] = this.getIndex(id);
         // print(i, j);
         return [(j - this.m / 2 + 0.5) * ZOOM, -(i - this.n / 2 + 0.5) * ZOOM];
     }
-    getBox(id: number, height: number) {
+    getBox(id: number, height: number): Box {
         let box = new Box(100, 100, height, this.scene);
         let [x, y] = this.getPosition(id);
         box.position.set(x, y, height / 2);
         return box;
     }
-    getMarchingBox(id: number, height: number, l: number, r: number) {
+    getMarchingBox(id: number, height: number, l: number, r: number): Box {
         let box = new Box(100, 100, height, this.scene);
+        let [x, y] = this.getPosition(id);
+        box.position.set(x, y, Math.random() * (r - l) + l);
+        box.positionAnimate(new Vector3(x, y, height / 2), { speed: 2000 });
+        return box;
     }
 }
 

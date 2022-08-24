@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 
 class Material {
-    static solid(color: THREE.Color = new THREE.Color('#ffffff')) {
-        color = color.clone();
+    static solid(color: THREE.ColorRepresentation = '#ffffff') {
+        color = new THREE.Color(color);
         return new THREE.MeshLambertMaterial({
             color: color,
             transparent: true,
@@ -27,8 +27,8 @@ class Material {
     //     ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
     //     return canvas;
     // }
-    static textCanvas(text: string | number, color: THREE.Color, bgColor: THREE.Color, width: number, height: number) {
-        let canvas = document.createElement('canvas');
+    static textCanvas(text: string, color: THREE.Color, bgColor: THREE.Color, width: number, height: number) {
+        let canvas: HTMLCanvasElement = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         let ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>canvas.getContext('2' + 'd');
@@ -44,7 +44,7 @@ class Material {
     }
     static text(text: string | number, color: THREE.Color, bgColor: THREE.Color) {
         return new THREE.MeshLambertMaterial({
-            map: new THREE.CanvasTexture(Material.textCanvas(text, color, bgColor, 200, 200)),
+            map: new THREE.CanvasTexture(Material.textCanvas(text.toString(), color, bgColor, 200, 200)),
             transparent: true,
             opacity: 1
         });

@@ -6,8 +6,8 @@ function height(): number {
     return Math.ceil(window.innerHeight + 0.5);
 }
 
-function canvas(): HTMLElement {
-    return <HTMLElement>document.getElementById('canvas');
+function canvas(): HTMLCanvasElement {
+    return <HTMLCanvasElement>document.getElementById('canvas');
 }
 
 function print(...args: any[]) {
@@ -18,7 +18,7 @@ function sgn(x: number) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
 }
 
-function range(n: number) {
+function range(n: number): Iterable<number> {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {
@@ -28,7 +28,7 @@ function range(n: number) {
     };
 }
 
-function rangeMatrix(n: number, m: number) {
+function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {

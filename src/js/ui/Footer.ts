@@ -1,6 +1,6 @@
 class Footer {
-    dom: HTMLElement
-    tasks: { dom: HTMLElement, text: string, color: string }[]
+    dom: HTMLDivElement
+    tasks: { dom: HTMLSpanElement, text: string, color: string }[]
     constructor() {
         this.dom = document.createElement('div');
         this.dom.id = 'footer';
@@ -17,7 +17,7 @@ class Footer {
     }
     setTask(pos: number, now: number, max: number, color: string) {
         if (pos == this.tasks.length) {
-            let dom = document.createElement('span');
+            let dom: HTMLSpanElement = document.createElement('span');
 
             this.tasks.push({
                 dom: dom,

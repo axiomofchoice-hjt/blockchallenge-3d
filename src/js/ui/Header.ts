@@ -1,5 +1,5 @@
 class Header {
-    dom: HTMLElement
+    dom: HTMLDivElement
     constructor() {
         this.dom = document.createElement('div');
         this.dom.id = 'header';

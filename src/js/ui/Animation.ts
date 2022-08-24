@@ -1,18 +1,28 @@
 import gsap from "gsap";
+import { Scene } from "./Scene";
+
+interface AnimationArgs {
+    speed?: number;
+    duration?: number;
+    ease?: string;
+    onUpdate?: () => void;
+    onComplete?: () => void;
+}
 
 class Animation {
-    public object: object;
+    static scene: Scene;
+    public target: any;
     public attr: string[];
     public tween: gsap.core.Tween | null;
-    constructor(object: object, attr: string | string[]) {
-        this.object = object;
+    constructor(target: any, attr: string | string[]) {
+        this.target = target;
         if (!Array.isArray(attr)) {
             attr = [attr];
         }
         this.attr = attr;
         this.tween = null;
     }
-    load(to: number | number[], args: object = {}) {
+    load(to: number | number[], args: AnimationArgs = {}) {
         if (!Array.isArray(to)) {
             to = [to];
         }
@@ -22,7 +32,7 @@ class Animation {
         );
         for (let i = 0; i < this.attr.length; i++) {
             if (to[i] === null) {
-                to[i] = this.object[this.attr[i]];
+                to[i] = this.target[this.attr[i]];
             }
         }
         if (this.tween !== null) {
@@ -35,35 +45,36 @@ class Animation {
             ...args
         };
 
-        let vars: object = {};
+        let vars: any = {};
         let dis: number = 0;
         for (let i = 0; i < this.attr.length; i++) {
             vars[this.attr[i]] = to[i];
-            dis = Math.max(dis, Math.abs(this.object[this.attr[i]] - to[i]));
+            dis = Math.max(dis, Math.abs(this.target[this.attr[i]] - to[i]));
         }
 
-        vars['duration'] = 10000;
+        vars.duration = 10000;
         console.assert(
-            args['speed'] !== undefined || args['duration'] !== undefined,
+            args.speed !== undefined || args.duration !== undefined,
             'speed or duration is needed'
-        )
-        if (args['speed'] !== undefined) {
-            vars['duration'] = Math.min(vars['duration'], dis / args['speed']);
+        );
+        if (args.speed !== undefined) {
+            vars.duration = Math.min(vars.duration, dis / args.speed);
         }
-        if (args['duration'] !== undefined) {
-            vars['duration'] = Math.min(vars['duration'], args['duration']);
+        if (args.duration !== undefined) {
+            vars.duration = Math.min(vars.duration, args.duration);
         }
 
-        vars['onUpdate'] = () => {
-            // Renderer.needRender = true;
-            args['onUpdate']();
+        vars.onUpdate = () => {
+            Animation.scene.changed = true;
+            if (args.onUpdate !== undefined) {
+                args.onUpdate();
+            }
         };
-        vars['onComplete'] = args['onComplete'];
-        vars['ease'] = args['ease'];
+        vars.onComplete = args.onComplete;
+        vars.ease = args.ease;
         // print(vars);
-        this.tween = gsap.to(this.object, vars
-        );
+        this.tween = gsap.to(this.target, vars);
     }
 }
 
-export { Animation };
+export { Animation, AnimationArgs };

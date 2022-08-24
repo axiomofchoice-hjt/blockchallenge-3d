@@ -14,7 +14,7 @@ class Scene {
     add(mesh: THREE.Mesh) {
         this.scene.add(mesh);
     }
-    _getScene() {
+    _getScene(): THREE.Scene {
         let scene = new THREE.Scene();
 
         // 点光源
@@ -28,7 +28,7 @@ class Scene {
 
         return scene;
     }
-    _getCamera() {
+    _getCamera(): THREE.PerspectiveCamera {
         let camera = new THREE.PerspectiveCamera(75, width() / height(), 0.1, 10000);
         camera.position.set(0, -200, 500);
         camera.up.set(0, 1, 0);
