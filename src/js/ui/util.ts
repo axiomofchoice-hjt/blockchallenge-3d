@@ -1,24 +1,24 @@
-function width() {
+function width(): number {
     return Math.ceil(window.innerWidth + 0.5);
 }
 
-function height() {
+function height(): number {
     return Math.ceil(window.innerHeight + 0.5);
 }
 
-function canvas() {
-    return document.getElementById('canvas');
+function canvas(): HTMLElement {
+    return <HTMLElement>document.getElementById('canvas');
 }
 
-function print() {
-    console.log(...arguments);
+function print(...args: any[]) {
+    console.log(...args);
 }
 
-function sgn(x) {
+function sgn(x: number) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
 }
 
-function range(n) {
+function range(n: number) {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {
@@ -28,7 +28,7 @@ function range(n) {
     };
 }
 
-function rangeMatrix(n, m) {
+function rangeMatrix(n: number, m: number) {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {

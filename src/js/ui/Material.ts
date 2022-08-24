@@ -1,8 +1,9 @@
 import * as THREE from 'three';
-import { width, height, canvas, print, sgn, range, rangeMatrix } from './util.js';
+import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 
-class Material extends THREE.MeshLambertMaterial {
-    static solid(color = '#ffffff') {
+class Material {
+    static solid(color: THREE.Color = new THREE.Color('#ffffff')) {
+        color = color.clone();
         return new THREE.MeshLambertMaterial({
             color: color,
             transparent: true,
@@ -26,11 +27,11 @@ class Material extends THREE.MeshLambertMaterial {
     //     ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
     //     return canvas;
     // }
-    static textCanvas(text, color, bgColor, width, height) {
+    static textCanvas(text: string | number, color: THREE.Color, bgColor: THREE.Color, width: number, height: number) {
         let canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
-        let ctx = canvas.getContext('2' + 'd');
+        let ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>canvas.getContext('2' + 'd');
         ctx.font = 80 + 'px bold';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -38,10 +39,10 @@ class Material extends THREE.MeshLambertMaterial {
         ctx.fillStyle = '#' + bgColor.getHexString();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#' + color.getHexString();
-        ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
+        ctx.fillText(<string>text, canvas.width / 2, canvas.height / 2 + 10);
         return canvas;
     }
-    static text(text, color, bgColor) {
+    static text(text: string | number, color: THREE.Color, bgColor: THREE.Color) {
         return new THREE.MeshLambertMaterial({
             map: new THREE.CanvasTexture(Material.textCanvas(text, color, bgColor, 200, 200)),
             transparent: true,

@@ -1,5 +1,6 @@
-var Header = {
-    init() {
+class Header {
+    dom: HTMLElement
+    constructor() {
         this.dom = document.createElement('div');
         this.dom.id = 'header';
         this.dom.style.position = 'fixed';
@@ -8,12 +9,11 @@ var Header = {
         this.dom.style.top = '20px';
         this.dom.style.left = '20px';
         document.body.appendChild(this.dom);
-        return Header;
-    },
-    setText(text) {
+    }
+    setText(text: string) {
         this.dom.innerText = text;
         return Header;
-    },
+    }
     drop() {
         this.dom.remove();
     }
