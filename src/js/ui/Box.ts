@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
-import { Material } from './Material';
+import { Material, TextArgs } from './Material';
 import { Animation, AnimationArgs } from './Animation';
 import { Scene } from './Scene';
 
@@ -27,6 +27,32 @@ class Color {
     }
 }
 
+class Content implements TextArgs {
+    private _text: string | number;
+    private _color: THREE.Color;
+    private _opacity: number;
+    private _onUpdate: () => void;
+    constructor(onUpdate: () => void) {
+        this._text = '';
+        this._color = new THREE.Color(0, 0, 0);
+        this._onUpdate = onUpdate;
+        this._opacity = 1;
+    }
+    get text() { return this._text; }
+    get color() { return this._color; }
+    get opacity() { return this._opacity; }
+    set text(text) {
+        if (typeof text === 'number') {
+            this._text = Math.round(text);
+        } else {
+            this._text = text;
+        }
+        this._onUpdate();
+    }
+    set color(color) { this._color = color; this._onUpdate(); }
+    set opacity(opacity) { this._opacity = opacity; this._onUpdate(); }
+}
+
 class BoxAnimation {
     private box: Box;
     private position: Animation;
@@ -34,15 +60,15 @@ class BoxAnimation {
     private scale: Animation;
     private integer: Animation;
     private opacity: Animation;
-    private color: Animation;
+    private contents: [Animation, Animation];
     constructor(box: Box) {
         this.box = box;
         this.position = new Animation(this.box.position, ['x', 'y', 'z']);
         this.bgColor = new Animation(this.box._bgColor, ['r', 'g', 'b']);
         this.scale = new Animation(this.box.scale, ['x', 'y', 'z']);
-        this.integer = new Animation(this.box, 'text');
+        this.integer = new Animation(this.box.contents[0], 'text');
         this.opacity = new Animation(this.box, 'opacity');
-        this.color = new Animation(this.box._color, ['r', 'g', 'b']);
+        this.contents = [new Animation(this.box.contents[0], 'opacity'), new Animation(this.box.contents[1], 'opacity')];
     }
     positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs) {
         if (to instanceof THREE.Vector3) {
@@ -72,17 +98,23 @@ class BoxAnimation {
     opacityTo(to: number, args: AnimationArgs) {
         this.opacity.load(to, args);
     }
-    colorTo(to: THREE.ColorRepresentation, args: AnimationArgs) {
-        to = new THREE.Color(to);
-        this.color.load([to.r, to.g, to.b], args);
+    contentTo(text: string | number, color: THREE.ColorRepresentation, args: AnimationArgs) {
+        [this.box.contents[0], this.box.contents[1]] = [this.box.contents[1], this.box.contents[0]];
+        [this.contents[0], this.contents[1]] = [this.contents[1], this.contents[0]];
+
+        this.box.contents[0].text = text;
+        this.box.contents[0].color = new THREE.Color(color);
+        this.box.contents[0].opacity = 0;
+
+        this.contents[0].load(1, args);
+        this.contents[1].load(0, args);
     }
 }
 
 class Box extends THREE.Mesh {
     public SIZE: THREE.Vector3;
-    private _text: string | number;
+    public contents: Content[];
     public _bgColor: Color;
-    public _color: Color;
     private _frontChanged: boolean;
     private scene: Scene;
     public animes: BoxAnimation;
@@ -100,30 +132,16 @@ class Box extends THREE.Mesh {
         );
         this._frontChanged = true;
         this.SIZE = new THREE.Vector3(x, y, z);
-        this._text = '';
+        this.contents = [new Content(() => { this._frontChanged = true; }), new Content(() => { this._frontChanged = true; })];
         this._bgColor = new Color('#ffffff', () => {
             this._frontChanged = true;
             for (let material of <THREE.MeshLambertMaterial[]>this.material) {
                 material.color = this._bgColor.get();
             }
         });
-        this._color = new Color('#000000', () => {
-            this._frontChanged = true;
-        });
         this.scene = scene;
         this.animes = new BoxAnimation(this);
         this.scene.add(this);
-    }
-    get text() {
-        return this._text;
-    }
-    set text(text) {
-        if (typeof text === 'number') {
-            this._text = Math.round(text);
-        } else {
-            this._text = text;
-        }
-        this._frontChanged = true;
     }
     get opacity() {
         return (<THREE.MeshLambertMaterial[]>this.material)[0].opacity;
@@ -137,8 +155,7 @@ class Box extends THREE.Mesh {
     _updateFrontMaterial() {
         this.scene.changed = true;
         let material = Material.text(
-            this._text,
-            this._color.get(),
+            this.contents,
             this._bgColor.get()
         );
         material.opacity = this.opacity;
@@ -152,9 +169,10 @@ class Box extends THREE.Mesh {
         }
     }
     click() {
-        // this.bgColorAnimate('#0ff', { duration: 1 });
-        // this.integerAnimate(100, { duration: 1 });
-        this.animes.heightTo(30, { duration: 1 });
+        this.animes.bgColorTo('#0ff', { duration: 1 });
+        // this.animes.integerTo(100, { duration: 1 });
+        // this.animes.heightTo(30, { duration: 1 });
+        this.animes.contentTo(Math.floor(Math.random() * 10), '#000', { duration: 1 });
     }
 }
 

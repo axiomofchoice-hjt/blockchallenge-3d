@@ -1,6 +1,12 @@
 import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 
+interface TextArgs {
+    text: string | number;
+    color: THREE.ColorRepresentation;
+    opacity: number;
+}
+
 class Material {
     static solid(color: THREE.ColorRepresentation = '#ffffff') {
         color = new THREE.Color(color);
@@ -27,7 +33,7 @@ class Material {
     //     ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 10);
     //     return canvas;
     // }
-    static textCanvas(text: string, color: THREE.Color, bgColor: THREE.Color, width: number, height: number) {
+    static textsCanvas(contents: TextArgs[], bgColor: THREE.Color, width: number, height: number) {
         let canvas: HTMLCanvasElement = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
@@ -38,13 +44,38 @@ class Material {
 
         ctx.fillStyle = '#' + bgColor.getHexString();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#' + color.getHexString();
-        ctx.fillText(<string>text, canvas.width / 2, canvas.height / 2 + 10);
+        for (let content of contents) {
+            let color = new THREE.Color(content.color);
+            ctx.fillStyle = `rgba(${color.r},${color.g},${color.b},${content.opacity})`;
+            ctx.fillText(<string>content.text, canvas.width / 2, canvas.height / 2 + 10);
+        }
         return canvas;
     }
-    static text(text: string | number, color: THREE.Color, bgColor: THREE.Color) {
+    // static textCanvas(text: string, color: THREE.Color, bgColor: THREE.Color, width: number, height: number) {
+    //     let canvas: HTMLCanvasElement = document.createElement('canvas');
+    //     canvas.width = width;
+    //     canvas.height = height;
+    //     let ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>canvas.getContext('2' + 'd');
+    //     ctx.font = 80 + 'px bold';
+    //     ctx.textAlign = 'center';
+    //     ctx.textBaseline = 'middle';
+
+    //     ctx.fillStyle = '#' + bgColor.getHexString();
+    //     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //     ctx.fillStyle = '#' + color.getHexString();
+    //     ctx.fillText(<string>text, canvas.width / 2, canvas.height / 2 + 10);
+    //     return canvas;
+    // }
+    // static text(text: string | number, color: THREE.Color, bgColor: THREE.Color) {
+    //     return new THREE.MeshLambertMaterial({
+    //         map: new THREE.CanvasTexture(Material.textsCanvas(text, color, bgColor, 200, 200)),
+    //         transparent: true,
+    //         opacity: 1
+    //     });
+    // }
+    static text(contents: TextArgs[], bgColor: THREE.Color) {
         return new THREE.MeshLambertMaterial({
-            map: new THREE.CanvasTexture(Material.textCanvas(text.toString(), color, bgColor, 200, 200)),
+            map: new THREE.CanvasTexture(Material.textsCanvas(contents, bgColor, 200, 200)),
             transparent: true,
             opacity: 1
         });
@@ -63,4 +94,4 @@ class Material {
     // };
 }
 
-export { Material };
+export { Material, TextArgs };

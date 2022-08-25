@@ -1,9 +1,10 @@
 import * as THREE from 'three';
+import { Animation } from './Animation';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 
 class Scene {
     static ANGLE_OF_VIEW: number = 75;
-    static ANGLE_OF_HEIGHT: number = Math.PI / 2;
+    static ANGLE_OF_HEIGHT: number = Math.PI / 2 * 4 / 5;
     public scene: THREE.Scene;
     public camera: THREE.PerspectiveCamera;
     public changed: boolean;
@@ -12,6 +13,7 @@ class Scene {
         this.camera = this._getCamera();
         this.fitWindow();
         this.changed = true;
+        Animation.scene = this;
     }
     add(mesh: THREE.Mesh) {
         this.scene.add(mesh);
