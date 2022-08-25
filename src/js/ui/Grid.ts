@@ -16,22 +16,22 @@ class Grid {
         this.fitWindow();
     }
     fitWindow() {
-        let bottomAngle = 75 / 2 / 180 * Math.PI;
+        let bottomAngle = Scene.ANGLE_OF_VIEW / 2 / 180 * Math.PI;
         let bottom = ZOOM * (this.n + 1) / 2;
-        let sideAngle = Math.atan(5 / 2);
+        let sideAngle = Scene.ANGLE_OF_HEIGHT;
         let side = bottom * Math.sin(sideAngle) / Math.sin(bottomAngle);
         let outerAngle = bottomAngle + sideAngle;
         let z = side * Math.sin(outerAngle);
-        let y = -z / 5 * 2;
+        let y = -z / Math.tan(sideAngle);
 
         let topAngle = Math.min(Math.PI / 2 - 0.001, 75 / height() * width() / 2 / 180 * Math.PI);
         let widthBottom = ZOOM * (this.m + 2) / 2;
         if (z < widthBottom / Math.tan(topAngle)) {
             z = widthBottom / Math.tan(topAngle);
-            y = -z / 5 * 2;
+            y = -z / Math.tan(sideAngle);
         }
 
-        this.scene.camera.position.set(0, y, z);
+        this.scene.camera.position.set(0, y, z + 10);
         this.scene.camera.lookAt(0, 0, 0);
     }
     getId(i: number, j: number): number {
@@ -55,7 +55,6 @@ class Grid {
         return box;
     }
     getMarchingBoxes(height: number, l: number, r: number): Box[] {
-        let id = 0;
         let z = [];
         for (let i of range(this.n * this.m)) {
             z.push(l + (r - l) * i / (this.n * this.m));
