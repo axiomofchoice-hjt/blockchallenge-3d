@@ -27,14 +27,65 @@ class Color {
     }
 }
 
+class BoxAnimation {
+    private box: Box;
+    private position: Animation;
+    private bgColor: Animation;
+    private scale: Animation;
+    private integer: Animation;
+    private opacity: Animation;
+    private color: Animation;
+    constructor(box: Box) {
+        this.box = box;
+        this.position = new Animation(this.box.position, ['x', 'y', 'z']);
+        this.bgColor = new Animation(this.box._bgColor, ['r', 'g', 'b']);
+        this.scale = new Animation(this.box.scale, ['x', 'y', 'z']);
+        this.integer = new Animation(this.box, 'text');
+        this.opacity = new Animation(this.box, 'opacity');
+        this.color = new Animation(this.box._color, ['r', 'g', 'b']);
+    }
+    positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs) {
+        if (to instanceof THREE.Vector3) {
+            this.position.load([to.x, to.y, to.z], args);
+        } else {
+            this.position.load(to, args);
+        }
+    }
+    bgColorTo(to: THREE.ColorRepresentation, args: AnimationArgs) {
+        to = new THREE.Color(to);
+        this.bgColor.load([to.r, to.g, to.b], args);
+    }
+    scaleTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs) {
+        if (to instanceof THREE.Vector3) {
+            this.scale.load([to.x, to.y, to.z], args);
+        } else {
+            this.scale.load(to, args);
+        }
+    }
+    heightTo(to: number, args: AnimationArgs) {
+        this.positionTo(new THREE.Vector3(this.box.position.x, this.box.position.y, to / 2), args);
+        this.scaleTo(new THREE.Vector3(this.box.scale.x, this.box.scale.y, to / this.box.SIZE.z), args);
+    }
+    integerTo(to: number, args: AnimationArgs) {
+        this.integer.load(to, args);
+    }
+    opacityTo(to: number, args: AnimationArgs) {
+        this.opacity.load(to, args);
+    }
+    colorTo(to: THREE.ColorRepresentation, args: AnimationArgs) {
+        to = new THREE.Color(to);
+        this.color.load([to.r, to.g, to.b], args);
+    }
+}
+
 class Box extends THREE.Mesh {
     public SIZE: THREE.Vector3;
     private _text: string | number;
-    private _bgColor: Color;
-    private _color: Color;
+    public _bgColor: Color;
+    public _color: Color;
     private _frontChanged: boolean;
     private scene: Scene;
-    private animes: any;
+    public animes: BoxAnimation;
     constructor(x: number, y: number, z: number, scene: Scene) {
         super(
             new THREE.BoxGeometry(x, y, z),
@@ -60,11 +111,7 @@ class Box extends THREE.Mesh {
             this._frontChanged = true;
         });
         this.scene = scene;
-        this.animes = {};
-        this.animes.position = new Animation(this.position, ['x', 'y', 'z']);
-        this.animes.bgColor = new Animation(this._bgColor, ['r', 'g', 'b']);
-        this.animes.scale = new Animation(this.scale, ['x', 'y', 'z']);
-        this.animes.integer = new Animation(this, 'text');
+        this.animes = new BoxAnimation(this);
         this.scene.add(this);
     }
     get text() {
@@ -78,10 +125,10 @@ class Box extends THREE.Mesh {
         }
         this._frontChanged = true;
     }
-    get materialOpacity() {
+    get opacity() {
         return (<THREE.MeshLambertMaterial[]>this.material)[0].opacity;
     }
-    set materialOpacity(opacity) {
+    set opacity(opacity) {
         this.scene.changed = true;
         for (let i of <THREE.MeshLambertMaterial[]>this.material) {
             i.opacity = opacity;
@@ -94,7 +141,7 @@ class Box extends THREE.Mesh {
             this._color.get(),
             this._bgColor.get()
         );
-        material.opacity = this.materialOpacity;
+        material.opacity = this.opacity;
         (<THREE.MeshLambertMaterial[]>this.material)[4] = material;
     }
     update(delta: number) {
@@ -104,27 +151,10 @@ class Box extends THREE.Mesh {
             this._frontChanged = false;
         }
     }
-    positionAnimate(to: THREE.Vector3, args: AnimationArgs) {
-        this.animes.position.load([to.x, to.y, to.z], args);
-    }
-    bgColorAnimate(to: THREE.ColorRepresentation, args: AnimationArgs) {
-        to = new THREE.Color(to);
-        this.animes.bgColor.load([to.r, to.g, to.b], args);
-    }
-    scaleAnimate(to: THREE.Vector3, args: AnimationArgs) {
-        this.animes.scale.load([to.x, to.y, to.z], args);
-    }
-    heightAnimation(to: number, args: AnimationArgs) {
-        this.positionAnimate(new THREE.Vector3(this.position.x, this.position.y, to / 2), args);
-        this.scaleAnimate(new THREE.Vector3(this.scale.x, this.scale.y, to / this.SIZE.z), args);
-    }
-    integerAnimate(to: number, args: AnimationArgs) {
-        this.animes.integer.load(to, args);
-    }
     click() {
         // this.bgColorAnimate('#0ff', { duration: 1 });
         // this.integerAnimate(100, { duration: 1 });
-        this.heightAnimation(30, { duration: 1 });
+        this.animes.heightTo(30, { duration: 1 });
     }
 }
 

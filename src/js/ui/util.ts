@@ -40,4 +40,12 @@ function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
     };
 }
 
-export { width, height, canvas, print, sgn, range, rangeMatrix };
+function shuffle(arr: any[]): any[] {
+    for (let i = arr.length - 1; i >= 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle };

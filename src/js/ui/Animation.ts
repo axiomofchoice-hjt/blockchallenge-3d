@@ -7,6 +7,7 @@ interface AnimationArgs {
     ease?: string;
     onUpdate?: () => void;
     onComplete?: () => void;
+    delay?: number;
 }
 
 class Animation {
@@ -72,6 +73,7 @@ class Animation {
         };
         vars.onComplete = args.onComplete;
         vars.ease = args.ease;
+        vars.delay = args.delay;
         // print(vars);
         this.tween = gsap.to(this.target, vars);
     }

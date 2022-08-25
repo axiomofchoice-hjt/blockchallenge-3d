@@ -15,21 +15,17 @@ var renderer = new Renderer();
 var scene = new Scene();
 Animation.scene = scene;
 
-var grid = new Grid(4, 5, scene);
+var grid = new Grid(7, 9, scene);
 
 var header = new Header();
 header.setText("23333");
 var footer = new Footer();
 footer.setTask(0, 2, 3, '#000');
 
-// 创建网格模型
-const n = 4, m = 5;
-for (let id of range(n * m)) {
-    let box = grid.getMarchingBox(id, 10, -2000, -100);
-    box.text = id;
+let boxes = grid.getMarchingBoxes(10, -300, -50);
+for (let id of grid.getIds()) {
+    boxes[id].text = id;
 }
-
-// 执行渲染操作
 
 window.addEventListener('resize', () => {
     scene.fitWindow();

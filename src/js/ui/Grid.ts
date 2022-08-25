@@ -1,4 +1,4 @@
-import { height, print, width } from './util';
+import { height, print, width, range, shuffle } from './util';
 import { Box } from './Box';
 import { Scene } from './Scene';
 import { Vector3 } from 'three';
@@ -40,6 +40,9 @@ class Grid {
     getIndex(id: number): [number, number] {
         return [Math.floor(id / this.m), id % this.m];
     }
+    getIds(): Iterable<number> {
+        return range(this.n * this.m);
+    }
     getPosition(id: number): [number, number] {
         let [i, j] = this.getIndex(id);
         // print(i, j);
@@ -51,12 +54,24 @@ class Grid {
         box.position.set(x, y, height / 2);
         return box;
     }
-    getMarchingBox(id: number, height: number, l: number, r: number): Box {
-        let box = new Box(100, 100, height, this.scene);
-        let [x, y] = this.getPosition(id);
-        box.position.set(x, y, Math.random() * (r - l) + l);
-        box.positionAnimate(new Vector3(x, y, height / 2), { speed: 2000 });
-        return box;
+    getMarchingBoxes(height: number, l: number, r: number): Box[] {
+        let id = 0;
+        let z = [];
+        for (let i of range(this.n * this.m)) {
+            z.push(l + (r - l) * i / (this.n * this.m));
+        }
+        z = shuffle(z);
+        let boxes = [];
+        for (let id of range(this.n * this.m)) {
+            let box = new Box(100, 100, height, this.scene);
+            let [x, y] = this.getPosition(id);
+            box.position.set(x, y, z[id]);
+            box.opacity = 0;
+            box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 200, delay: 1 });
+            box.animes.opacityTo(1, { duration: Math.abs(z[id]) / 200, delay: 1 });
+            boxes.push(box);
+        }
+        return boxes;
     }
 }
 
