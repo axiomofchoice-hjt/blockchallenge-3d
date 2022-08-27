@@ -1,0 +1,5 @@
+class StageBase {
+
+}
+
+export { StageBase };

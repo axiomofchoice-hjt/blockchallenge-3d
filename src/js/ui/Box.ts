@@ -104,7 +104,6 @@ class BoxAnimation {
 
         this.box.contents[0].text = text;
         this.box.contents[0].color = new THREE.Color(color);
-        this.box.contents[0].opacity = 0;
 
         this.contents[0].load(1, args);
         this.contents[1].load(0, args);
@@ -118,6 +117,7 @@ class Box extends THREE.Mesh {
     private _frontChanged: boolean;
     private scene: Scene;
     public animes: BoxAnimation;
+    public index: number;
     constructor(x: number, y: number, z: number, scene: Scene) {
         super(
             new THREE.BoxGeometry(x, y, z),
@@ -133,6 +133,7 @@ class Box extends THREE.Mesh {
         this._frontChanged = true;
         this.SIZE = new THREE.Vector3(x, y, z);
         this.contents = [new Content(() => { this._frontChanged = true; }), new Content(() => { this._frontChanged = true; })];
+        this.contents[1].opacity = 0;
         this._bgColor = new Color('#ffffff', () => {
             this._frontChanged = true;
             for (let material of <THREE.MeshLambertMaterial[]>this.material) {
@@ -142,6 +143,7 @@ class Box extends THREE.Mesh {
         this.scene = scene;
         this.animes = new BoxAnimation(this);
         this.scene.add(this);
+        this.index = 0;
     }
     get opacity() {
         return (<THREE.MeshLambertMaterial[]>this.material)[0].opacity;
@@ -168,12 +170,12 @@ class Box extends THREE.Mesh {
             this._frontChanged = false;
         }
     }
-    click() {
-        this.animes.bgColorTo('#0ff', { duration: 1 });
-        // this.animes.integerTo(100, { duration: 1 });
-        // this.animes.heightTo(30, { duration: 1 });
-        this.animes.contentTo(Math.floor(Math.random() * 10), '#000', { duration: 1 });
-    }
+    // click() {
+    //     this.animes.bgColorTo('#0ff', { duration: 1 });
+    //     // this.animes.integerTo(100, { duration: 1 });
+    //     // this.animes.heightTo(30, { duration: 1 });
+    //     this.animes.contentTo(Math.floor(Math.random() * 10), '#000', { duration: 1 });
+    // }
 }
 
 export { Box };

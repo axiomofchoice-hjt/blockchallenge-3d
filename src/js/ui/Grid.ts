@@ -6,12 +6,17 @@ import { Renderer } from './Renderer';
 
 const ZOOM = 120;
 
+interface Input {
+    click?: (id: number) => void;
+}
+
 class Grid {
     public n: number;
     public m: number;
     public renderer: Renderer;
     public scene: Scene;
     public boxes: Box[];
+    public input: Input;
     constructor(n: number, m: number) {
         this.n = n;
         this.m = m;
@@ -22,6 +27,11 @@ class Grid {
         for (let id of this.getIds()) {
             this.boxes[id].contents[0].text = id;
         }
+        this.input = {
+            click(id: number) {
+                print(id);
+            }
+        };
     }
     fitWindow() {
         this.scene.fitWindow();
@@ -78,6 +88,7 @@ class Grid {
             box.position.set(x, y, z[id]);
             box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 200, delay: 0.1 });
             boxes.push(box);
+            box.index = id;
         }
         return boxes;
     }

@@ -3,10 +3,6 @@ import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util';
 
 import { Box } from './ui/Box';
-import { Renderer } from './ui/Renderer';
-import { Scene } from './ui/Scene';
-import { Animation } from './ui/Animation';
-
 import { Header } from './ui/Header';
 import { Footer } from './ui/Footer';
 import { Grid } from './ui/Grid';
@@ -45,9 +41,17 @@ function clickEvent(event: MouseEvent) {
     if (intersects.length) {
         var box = intersects[0].object;
         if (box instanceof Box) {
-            box.click();
+            if (grid.input.click !== undefined) {
+                grid.input.click(box.index);
+            }
         }
     }
 }
 
+function keyEvent(event: KeyboardEvent) {
+    print(event.code);
+}
+
 canvas().addEventListener('click', clickEvent, false);
+
+document.addEventListener('keydown', keyEvent, false);
