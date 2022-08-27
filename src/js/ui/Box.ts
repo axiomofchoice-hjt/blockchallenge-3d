@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 import { Material, TextArgs } from './Material';
 import { Animation, AnimationArgs } from './Animation';
 import { Scene } from './Scene';

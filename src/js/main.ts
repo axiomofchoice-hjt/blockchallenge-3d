@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import { width, height, canvas, print, sgn, range, rangeMatrix } from './ui/util';
+import { width, height, canvas, print, DIRECTION } from './ui/util';
 
 import { Box } from './ui/Box';
 import { Header } from './ui/Header';
@@ -31,7 +31,9 @@ let mainLoop = () => {
 };
 mainLoop();
 
+// 鼠标点击事件
 function clickEvent(event: MouseEvent) {
+    // 处理射线是否接触物体
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
     mouse.x = (event.clientX / width()) * 2 - 1;
@@ -48,8 +50,21 @@ function clickEvent(event: MouseEvent) {
     }
 }
 
+// 键盘事件
 function keyEvent(event: KeyboardEvent) {
-    print(event.code);
+    // 处理方向键
+    for (let i = 0; i < 4; i++) {
+        if (DIRECTION[i].keyCodes.indexOf(event.code) !== -1) {
+            if (grid.input.direction !== undefined) {
+                grid.input.direction(i);
+            }
+        }
+    }
+
+    // 一般按键
+    if (grid.input.key !== undefined) {
+        grid.input.key(event.code);
+    }
 }
 
 canvas().addEventListener('click', clickEvent, false);

@@ -48,4 +48,11 @@ function shuffle(arr: any[]): any[] {
     return arr;
 }
 
-export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle };
+const DIRECTION = [
+    { keyCodes: ['ArrowLeft', 'KeyA'], position: [0, -1] },
+    { keyCodes: ['ArrowUp', 'KeyW'], position: [-1, 0] },
+    { keyCodes: ['ArrowRight', 'KeyD'], position: [0, 1] },
+    { keyCodes: ['ArrowDown', 'KeyS'], position: [1, 0] },
+];
+
+export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle, DIRECTION };

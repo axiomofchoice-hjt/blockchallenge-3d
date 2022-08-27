@@ -6,8 +6,11 @@ import { Renderer } from './Renderer';
 
 const ZOOM = 120;
 
+// 输入事件
 interface Input {
     click?: (id: number) => void;
+    key?: (code: string) => void;
+    direction?: (dir: number) => void;
 }
 
 class Grid {
@@ -30,6 +33,9 @@ class Grid {
         this.input = {
             click(id: number) {
                 print(id);
+            },
+            direction(dir) {
+                print(dir);
             }
         };
     }

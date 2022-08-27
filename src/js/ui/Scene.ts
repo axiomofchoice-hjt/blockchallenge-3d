@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Animation } from './Animation';
-import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
+import { width, height} from './util';
 
 class Scene {
     static ANGLE_OF_VIEW: number = 75;
