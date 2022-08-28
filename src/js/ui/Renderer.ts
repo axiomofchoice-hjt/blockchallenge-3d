@@ -10,7 +10,7 @@ class Renderer {
     }
     _getRenderer(): THREE.WebGLRenderer {
         let renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
-        renderer.setClearColor(0xADF8FF, 1);
+        renderer.setClearColor("#B0FFFF", 1);
 
         return renderer;
     }

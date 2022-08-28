@@ -8,6 +8,7 @@ class Header {
         this.dom.style.fontSize = '30px';
         this.dom.style.top = '20px';
         this.dom.style.left = '20px';
+        this.dom.style.fontFamily = 'Arial';
         document.body.appendChild(this.dom);
     }
     setText(text: string) {

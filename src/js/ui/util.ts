@@ -1,24 +1,24 @@
-function width(): number {
+export function width(): number {
     return Math.ceil(window.innerWidth + 0.5);
 }
 
-function height(): number {
+export function height(): number {
     return Math.ceil(window.innerHeight + 0.5);
 }
 
-function canvas(): HTMLCanvasElement {
+export function canvas(): HTMLCanvasElement {
     return <HTMLCanvasElement>document.getElementById('canvas');
 }
 
-function print(...args: any[]) {
+export function print(...args: any[]) {
     console.log(...args);
 }
 
-function sgn(x: number) {
+export function sgn(x: number) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
 }
 
-function range(n: number): Iterable<number> {
+export function range(n: number): Iterable<number> {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {
@@ -28,7 +28,7 @@ function range(n: number): Iterable<number> {
     };
 }
 
-function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
+export function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
     return {
         *[Symbol.iterator]() {
             for (let i = 0; i < n; i++) {
@@ -40,7 +40,7 @@ function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
     };
 }
 
-function genArray<T>(n: number, el: () => T): T[] {
+export function genArray<T>(n: number, el: () => T): T[] {
     let res = [];
     for (let i = 0; i < n; i++) {
         res.push(el());
@@ -48,7 +48,7 @@ function genArray<T>(n: number, el: () => T): T[] {
     return res;
 }
 
-function shuffle<T>(arr: T[]): T[] {
+export function shuffle<T>(arr: T[]): T[] {
     for (let i = arr.length - 1; i >= 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -56,11 +56,25 @@ function shuffle<T>(arr: T[]): T[] {
     return arr;
 }
 
-const DIRECTION = [
+export const DIRECTION = [
     { keyCodes: ['ArrowLeft', 'KeyA'], position: [0, -1] },
     { keyCodes: ['ArrowUp', 'KeyW'], position: [-1, 0] },
     { keyCodes: ['ArrowRight', 'KeyD'], position: [0, 1] },
     { keyCodes: ['ArrowDown', 'KeyS'], position: [1, 0] },
 ];
 
-export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle, DIRECTION, genArray };
+export const
+    black = "Black",
+    white = "White",
+    grey = "LightGrey",
+    yellow = "Gold",
+    red = "Tomato",
+    green = "LimeGreen",
+    blue = "DeepSkyBlue",
+    purple = "#D3D",
+    orange = "DarkOrange";
+
+export const
+    textGreen = "#080",
+    textRed = "Red",
+    textBlack = "Black";
