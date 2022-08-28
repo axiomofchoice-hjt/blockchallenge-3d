@@ -3,23 +3,28 @@ import { Box } from './Box';
 import { Scene } from './Scene';
 import { Vector3 } from 'three';
 import { Renderer } from './Renderer';
+import { StageInterface } from '../stages/StageInterface';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 const ZOOM = 120;
 
 // 输入事件
 interface Input {
-    click?: (id: number) => void;
-    key?: (code: string) => void;
-    direction?: (dir: number) => void;
+    click?(id: number): void;
+    key?(code: string): void;
+    direction?(dir: number): void;
 }
 
-class Grid {
+class Grid implements StageInterface {
     public n: number;
     public m: number;
     public renderer: Renderer;
     public scene: Scene;
     public boxes: Box[];
     public input: Input;
+    public header: Header;
+    public footer: Footer;
     constructor(n: number, m: number) {
         this.n = n;
         this.m = m;
@@ -31,13 +36,17 @@ class Grid {
             this.boxes[id].contents[0].text = id;
         }
         this.input = {
-            click(id: number) {
-                print(id);
-            },
-            direction(dir) {
-                print(dir);
-            }
+            // click(id: number) {
+            //     print(id);
+            // },
+            // direction(dir) {
+            //     print(dir);
+            // }
         };
+        this.header = new Header();
+        this.footer = new Footer();
+        // this.header.setText("23333");
+        // this.footer.addTask(2, 3, '#000');
     }
     fitWindow() {
         this.scene.fitWindow();
@@ -60,6 +69,9 @@ class Grid {
 
         this.scene.camera.position.set(0, y, z + 10);
         this.scene.camera.lookAt(0, 0, 10);
+    }
+    get size(): number {
+        return this.n * this.m;
     }
     getId(i: number, j: number): number {
         return i * this.m + j;
@@ -98,6 +110,12 @@ class Grid {
         }
         return boxes;
     }
+    mainLoopUpdate(delta: number) {
+        for (let box of this.boxes) {
+            box.update(delta);
+        }
+        this.renderer.render(this.scene);
+    }
 }
 
-export { Grid };
+export { Grid, Input };

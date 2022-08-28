@@ -54,10 +54,10 @@ class Animation {
         }
 
         vars.duration = 10000;
-        console.assert(
-            args.speed !== undefined || args.duration !== undefined,
-            'speed or duration is needed'
-        );
+        if (
+            args.speed === undefined && args.duration === undefined) {
+            args.duration = 0.2;
+        }
         if (args.speed !== undefined) {
             vars.duration = Math.min(vars.duration, dis / args.speed);
         }

@@ -3,16 +3,11 @@ import * as THREE from 'three';
 import { width, height, canvas, print, DIRECTION } from './ui/util';
 
 import { Box } from './ui/Box';
-import { Header } from './ui/Header';
-import { Footer } from './ui/Footer';
 import { Grid } from './ui/Grid';
+import { StageInterface } from './stages/StageInterface';
+import { Stage } from './stages/stage0';
 
-var grid = new Grid(7, 9);
-
-var header = new Header();
-header.setText("23333");
-var footer = new Footer();
-footer.setTask(0, 2, 3, '#000');
+var grid: StageInterface = new Stage();
 
 window.addEventListener('resize', () => {
     grid.fitWindow();
@@ -22,12 +17,7 @@ let clock = new THREE.Clock();
 let mainLoop = () => {
     requestAnimationFrame(mainLoop);
     let delta = clock.getDelta();
-    for (let i of grid.scene.scene.children) {
-        if (i instanceof Box) {
-            i.update(delta);
-        }
-    }
-    grid.renderer.render(grid.scene);
+    grid.mainLoopUpdate(delta);
 };
 mainLoop();
 

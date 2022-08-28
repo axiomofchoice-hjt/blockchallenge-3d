@@ -69,35 +69,35 @@ class BoxAnimation {
         this.opacity = new Animation(this.box, 'opacity');
         this.contents = [new Animation(this.box.contents[0], 'opacity'), new Animation(this.box.contents[1], 'opacity')];
     }
-    positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs) {
+    positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs = {}) {
         if (to instanceof THREE.Vector3) {
             this.position.load([to.x, to.y, to.z], args);
         } else {
             this.position.load(to, args);
         }
     }
-    bgColorTo(to: THREE.ColorRepresentation, args: AnimationArgs) {
+    bgColorTo(to: THREE.ColorRepresentation, args: AnimationArgs = {}) {
         to = new THREE.Color(to);
         this.bgColor.load([to.r, to.g, to.b], args);
     }
-    scaleTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs) {
+    scaleTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs = {}) {
         if (to instanceof THREE.Vector3) {
             this.scale.load([to.x, to.y, to.z], args);
         } else {
             this.scale.load(to, args);
         }
     }
-    heightTo(to: number, args: AnimationArgs) {
+    heightTo(to: number, args: AnimationArgs = {}) {
         this.positionTo(new THREE.Vector3(this.box.position.x, this.box.position.y, to / 2), args);
         this.scaleTo(new THREE.Vector3(this.box.scale.x, this.box.scale.y, to / this.box.SIZE.z), args);
     }
-    integerTo(to: number, args: AnimationArgs) {
+    integerTo(to: number, args: AnimationArgs = {}) {
         this.integer.load(to, args);
     }
-    opacityTo(to: number, args: AnimationArgs) {
+    opacityTo(to: number, args: AnimationArgs = {}) {
         this.opacity.load(to, args);
     }
-    contentTo(text: string | number, color: THREE.ColorRepresentation, args: AnimationArgs) {
+    contentTo(text: string | number, color: THREE.ColorRepresentation = 0, args: AnimationArgs = {}) {
         [this.box.contents[0], this.box.contents[1]] = [this.box.contents[1], this.box.contents[0]];
         [this.contents[0], this.contents[1]] = [this.contents[1], this.contents[0]];
 

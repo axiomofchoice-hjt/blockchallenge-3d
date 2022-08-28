@@ -1,6 +1,39 @@
+class Task {
+    dom: HTMLSpanElement;
+    now: number;
+    max: number;
+    check: (now: number, max: number) => number;
+    constructor(father: Footer, now: number, max: number, check: (now: number, max: number) => number) {
+        this.dom = document.createElement('span');
+        father.dom.appendChild(this.dom);
+        this.now = now;
+        this.max = max;
+        this.check = check;
+
+        this.update();
+    }
+    add(k: number) {
+        this.now += k;
+        this.update();
+    }
+    set(k: number) {
+        this.now = k;
+        this.update();
+    }
+    update() {
+        let check = this.check(this.now, this.max);
+        this.dom.style.color = check == 1 ? OkColor : check == 0 ? MidColor : FailColor;
+        this.dom.innerText = `[${this.now}/${this.max}]`;
+    }
+}
+
+const OkColor = "#0f0";
+const MidColor = "#000";
+const FailColor = "#f00";
+
 class Footer {
-    dom: HTMLDivElement
-    tasks: { dom: HTMLSpanElement, text: string, color: string }[]
+    dom: HTMLDivElement;
+    tasks: Task[];
     constructor() {
         this.dom = document.createElement('div');
         this.dom.id = 'footer';
@@ -15,31 +48,13 @@ class Footer {
 
         this.tasks = [];
     }
-    setTask(pos: number, now: number, max: number, color: string) {
-        if (pos == this.tasks.length) {
-            let dom: HTMLSpanElement = document.createElement('span');
-
-            this.tasks.push({
-                dom: dom,
-                text: '',
-                color: ''
-            });
-            this.dom.appendChild(dom);
-        }
-        this.tasks[pos].text = `[${now}/${max}]`;
-        this.tasks[pos].color = color;
-        this._update();
+    addTask(now: number, max: number, check: (now: number, max: number) => number) {
+        this.tasks.push(new Task(this, now, max, check));
     }
-    _update() {
-        for (let task of this.tasks) {
-            task.dom.style.color = task.color;
-            task.dom.innerText = task.text;
-        }
-    }
-    drop() {
-        this.tasks = [];
-        this.dom.remove();
-    }
+    // drop() {
+    //     this.tasks = [];
+    //     this.dom.remove();
+    // }
 };
 
 export { Footer };

@@ -40,7 +40,15 @@ function rangeMatrix(n: number, m: number): Iterable<[number, number]> {
     };
 }
 
-function shuffle(arr: any[]): any[] {
+function genArray<T>(n: number, el: () => T): T[] {
+    let res = [];
+    for (let i = 0; i < n; i++) {
+        res.push(el());
+    }
+    return res;
+}
+
+function shuffle<T>(arr: T[]): T[] {
     for (let i = arr.length - 1; i >= 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -55,4 +63,4 @@ const DIRECTION = [
     { keyCodes: ['ArrowDown', 'KeyS'], position: [1, 0] },
 ];
 
-export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle, DIRECTION };
+export { width, height, canvas, print, sgn, range, rangeMatrix, shuffle, DIRECTION, genArray };

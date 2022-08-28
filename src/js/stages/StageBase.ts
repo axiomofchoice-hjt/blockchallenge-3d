@@ -1,5 +1,0 @@
-class StageBase {
-
-}
-
-export { StageBase };
