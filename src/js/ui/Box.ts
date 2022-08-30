@@ -109,7 +109,7 @@ class BoxAnimation {
     }
 }
 
-class Box extends THREE.Mesh {
+export class Box extends THREE.Mesh {
     public SIZE: THREE.Vector3;
     public contents: Content[];
     public _bgColor: Color;
@@ -176,5 +176,3 @@ class Box extends THREE.Mesh {
     //     this.animes.contentTo(Math.floor(Math.random() * 10), '#000', { duration: 1 });
     // }
 }
-
-export { Box };

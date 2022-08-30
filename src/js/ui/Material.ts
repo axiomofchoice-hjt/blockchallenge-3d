@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 
-interface TextArgs {
+export interface TextArgs {
     text: string | number;
     color: THREE.ColorRepresentation;
     opacity: number;
 }
 
-class Material {
+export class Material {
     static solid(color: THREE.ColorRepresentation = '#ffffff') {
         color = new THREE.Color(color);
         return new THREE.MeshLambertMaterial({
@@ -92,5 +92,3 @@ class Material {
     //     };
     // };
 }
-
-export { Material, TextArgs };

@@ -1,4 +1,4 @@
-class Header {
+export class Header {
     dom: HTMLDivElement
     constructor() {
         this.dom = document.createElement('div');
@@ -19,5 +19,3 @@ class Header {
         this.dom.remove();
     }
 };
-
-export { Header };

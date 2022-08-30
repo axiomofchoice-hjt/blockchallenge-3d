@@ -10,13 +10,13 @@ import { Footer } from './Footer';
 const ZOOM = 120;
 
 // 输入事件
-interface Input {
+export interface Input {
     click?(id: number): void;
     key?(code: string): void;
     direction?(dir: number): void;
 }
 
-class Grid implements StageInterface {
+export class Grid implements StageInterface {
     public n: number;
     public m: number;
     public renderer: Renderer;
@@ -117,5 +117,3 @@ class Grid implements StageInterface {
         this.renderer.render(this.scene);
     }
 }
-
-export { Grid, Input };

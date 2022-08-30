@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { width, height, canvas, print, sgn, range, rangeMatrix } from './util';
 import { Scene } from './Scene';
 
-class Renderer {
+export class Renderer {
     public renderer: THREE.WebGLRenderer;
     constructor() {
         this.renderer = this._getRenderer();
@@ -26,5 +26,3 @@ class Renderer {
         }
     }
 }
-
-export { Renderer };

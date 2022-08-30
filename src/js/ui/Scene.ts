@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Animation } from './Animation';
 import { width, height} from './util';
 
-class Scene {
+export class Scene {
     static ANGLE_OF_VIEW: number = 75;
     static ANGLE_OF_HEIGHT: number = Math.PI / 2 * 4 / 5;
     public scene: THREE.Scene;
@@ -47,5 +47,3 @@ class Scene {
         this.changed = true;
     }
 }
-
-export { Scene };

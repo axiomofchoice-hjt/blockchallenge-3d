@@ -36,5 +36,4 @@ export class Stage extends Grid {
             }
         };
     }
-
 }

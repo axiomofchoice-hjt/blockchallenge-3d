@@ -34,7 +34,7 @@ class Task {
     }
 }
 
-class Footer {
+export class Footer {
     dom: HTMLDivElement;
     tasks: Task[];
     frontSpan: HTMLSpanElement;
@@ -93,5 +93,3 @@ class Footer {
     //     this.dom.remove();
     // }
 };
-
-export { Footer };

@@ -1,7 +1,7 @@
 import gsap from "gsap";
 import { Scene } from "./Scene";
 
-interface AnimationArgs {
+export interface AnimationArgs {
     speed?: number;
     duration?: number;
     ease?: string;
@@ -10,7 +10,7 @@ interface AnimationArgs {
     delay?: number;
 }
 
-class Animation {
+export class Animation {
     static scene: Scene;
     public target: any;
     public attr: string[];
@@ -78,5 +78,3 @@ class Animation {
         this.tween = gsap.to(this.target, vars);
     }
 }
-
-export { Animation, AnimationArgs };
