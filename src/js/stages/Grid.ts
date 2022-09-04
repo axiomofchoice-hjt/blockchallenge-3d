@@ -1,11 +1,11 @@
-import { height, print, width, range, shuffle } from './util';
-import { Box } from './Box';
-import { Scene } from './Scene';
+import { height, print, width, range, shuffle } from '../ui/util';
+import { Box } from '../ui/Box';
+import { Scene } from '../ui/Scene';
 import { Vector3 } from 'three';
-import { Renderer } from './Renderer';
-import { StageInterface } from '../stages/StageInterface';
-import { Header } from './Header';
-import { Footer } from './Footer';
+import { Renderer } from '../ui/Renderer';
+import { StageInterface } from './StageInterface';
+import { Header } from '../ui/Header';
+import { Footer } from '../ui/Footer';
 
 const ZOOM = 120;
 
@@ -32,9 +32,9 @@ export class Grid implements StageInterface {
         this.scene = new Scene();
         this.fitWindow();
         this.boxes = this.getMarchingBoxes(10, -300, -50);
-        for (let id of this.getIds()) {
-            this.boxes[id].contents[0].text = id;
-        }
+        // for (let id of this.getIds()) {
+        //     this.boxes[id].contents[0].text = id;
+        // }
         this.input = {
             // click(id: number) {
             //     print(id);
@@ -47,6 +47,7 @@ export class Grid implements StageInterface {
         this.footer = new Footer();
         // this.header.setText("23333");
         // this.footer.addTask(2, 3, '#000');
+        this.scene.changed = true;
     }
     fitWindow() {
         this.scene.fitWindow();
@@ -104,7 +105,7 @@ export class Grid implements StageInterface {
             let box = new Box(100, 100, height, this.scene);
             let [x, y] = this.getPosition(id);
             box.position.set(x, y, z[id]);
-            box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 200, delay: 0.1 });
+            box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 200 });
             boxes.push(box);
             box.index = id;
         }
@@ -115,5 +116,13 @@ export class Grid implements StageInterface {
             box.update(delta);
         }
         this.renderer.render(this.scene);
+    }
+    drop() {
+        for (let i of this.boxes) {
+            this.scene.scene.remove(i);
+        }
+        this.header.drop();
+        this.footer.drop();
+        this.scene.changed = true;
     }
 }

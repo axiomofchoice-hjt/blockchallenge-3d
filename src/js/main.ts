@@ -3,21 +3,19 @@ import * as THREE from 'three';
 import { width, height, canvas, print, DIRECTION } from './ui/util';
 
 import { Box } from './ui/Box';
-import { Grid } from './ui/Grid';
-import { StageInterface } from './stages/StageInterface';
-import { Stage } from './stages/stage0';
+import { Controller } from './stages/Controller';
 
-var grid: StageInterface = new Stage();
+var controller = new Controller();
 
 window.addEventListener('resize', () => {
-    grid.fitWindow();
+    controller.stage.fitWindow();
 }, false);
 
 let clock = new THREE.Clock();
 let mainLoop = () => {
     requestAnimationFrame(mainLoop);
     let delta = clock.getDelta();
-    grid.mainLoopUpdate(delta);
+    controller.stage.mainLoopUpdate(delta);
 };
 mainLoop();
 
@@ -28,13 +26,13 @@ function clickEvent(event: MouseEvent) {
     var mouse = new THREE.Vector2();
     mouse.x = (event.clientX / width()) * 2 - 1;
     mouse.y = -(event.clientY / height()) * 2 + 1;
-    raycaster.setFromCamera(mouse, grid.scene.camera);
-    var intersects = raycaster.intersectObjects(grid.scene.scene.children);
+    raycaster.setFromCamera(mouse, controller.stage.scene.camera);
+    var intersects = raycaster.intersectObjects(controller.stage.scene.scene.children);
     if (intersects.length) {
         var box = intersects[0].object;
         if (box instanceof Box) {
-            if (grid.input.click !== undefined) {
-                grid.input.click(box.index);
+            if (controller.stage.input.click !== undefined) {
+                controller.stage.input.click(box.index);
             }
         }
     }
@@ -45,15 +43,15 @@ function keyEvent(event: KeyboardEvent) {
     // 处理方向键
     for (let i = 0; i < 4; i++) {
         if (DIRECTION[i].keyCodes.indexOf(event.code) !== -1) {
-            if (grid.input.direction !== undefined) {
-                grid.input.direction(i);
+            if (controller.stage.input.direction !== undefined) {
+                controller.stage.input.direction(i);
             }
         }
     }
 
     // 一般按键
-    if (grid.input.key !== undefined) {
-        grid.input.key(event.code);
+    if (controller.stage.input.key !== undefined) {
+        controller.stage.input.key(event.code);
     }
 }
 

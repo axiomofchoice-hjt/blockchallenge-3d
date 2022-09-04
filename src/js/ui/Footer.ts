@@ -79,7 +79,7 @@ export class Footer {
     }
     completed(): boolean {
         for (let task of this.tasks) {
-            if (!task.check(task.now, task.max)) {
+            if (task.check(task.now, task.max) !== 1) {
                 return false;
             }
         }
@@ -88,8 +88,8 @@ export class Footer {
     update() {
         this.completeSpan.style.display = (this.completed() ? 'inline' : 'none');
     }
-    // drop() {
-    //     this.tasks = [];
-    //     this.dom.remove();
-    // }
+    drop() {
+        // this.tasks = [];
+        this.dom.remove();
+    }
 };

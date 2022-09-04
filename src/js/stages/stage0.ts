@@ -1,16 +1,23 @@
-import { Grid } from "../ui/Grid";
-import { blue, genArray, red, yellow } from "../ui/util";
+import { Grid } from "./Grid";
+import { black, blue, genArray, red, yellow } from "../ui/util";
+import { Controller } from "./Controller";
 
-export class Stage extends Grid {
+export class Stage0 extends Grid {
     L: number;
     R: number;
     tag: boolean[];
-    constructor() {
+    father: Controller;
+    constructor(father: Controller) {
         super(7, 9);
+        this.father = father;
         this.L = 0;
         this.R = this.size - 1;
         this.tag = genArray(this.size, () => false);
-        this.header.setText('猜数游戏 请点击数字');
+        this.header.setText(father.stageId, '猜数游戏 请点击数字');
+
+        for (let id of this.getIds()) {
+            this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
+        }
         this.footer.addTask(0, 1, (x, n) => (x == n ? 1 : 0));
         this.footer.addTask(0, 6, (x, n) => (x > n) ? -1 : 1);
         this.input.click = (id: number) => {
