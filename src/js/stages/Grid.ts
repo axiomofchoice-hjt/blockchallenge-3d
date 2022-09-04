@@ -6,6 +6,7 @@ import { Renderer } from '../ui/Renderer';
 import { StageInterface } from './StageInterface';
 import { Header } from '../ui/Header';
 import { Footer } from '../ui/Footer';
+import { Controller } from './Controller';
 
 const ZOOM = 120;
 
@@ -25,7 +26,9 @@ export class Grid implements StageInterface {
     public input: Input;
     public header: Header;
     public footer: Footer;
-    constructor(n: number, m: number) {
+    father: Controller;
+    constructor(father: Controller, n: number, m: number) {
+        this.father = father;
         this.n = n;
         this.m = m;
         this.renderer = new Renderer();
@@ -43,8 +46,8 @@ export class Grid implements StageInterface {
             //     print(dir);
             // }
         };
-        this.header = new Header();
-        this.footer = new Footer();
+        this.header = new Header(this);
+        this.footer = new Footer(this);
         // this.header.setText("23333");
         // this.footer.addTask(2, 3, '#000');
         this.scene.changed = true;

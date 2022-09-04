@@ -1,3 +1,5 @@
+import { Cookie } from "../stages/Cookie";
+import { StageInterface } from "../stages/StageInterface";
 import { textBlack, textGreen, textRed } from "./util";
 
 class Task {
@@ -40,7 +42,9 @@ export class Footer {
     frontSpan: HTMLSpanElement;
     tasksSpan: HTMLSpanElement;
     completeSpan: HTMLSpanElement;
-    constructor() {
+    father: StageInterface;
+    constructor(father: StageInterface) {
+        this.father = father;
         this.dom = document.createElement('div');
         this.dom.id = 'footer';
         this.dom.style.position = 'fixed';
@@ -87,9 +91,12 @@ export class Footer {
     }
     update() {
         this.completeSpan.style.display = (this.completed() ? 'inline' : 'none');
+
+        if (this.completed() && this.father.father.stageId >= 0) {
+            Cookie.set(this.father.father.stageId);
+        }
     }
     drop() {
-        // this.tasks = [];
         this.dom.remove();
     }
 };

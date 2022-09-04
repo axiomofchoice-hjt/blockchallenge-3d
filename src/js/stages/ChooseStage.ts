@@ -7,10 +7,11 @@ export const STAGE_COUNT = 1;
 const COLUMN_COUNT = 5;
 
 export class ChooseStage extends Grid {
-    father: Controller;
     constructor(father: Controller) {
-        super(Math.floor((STAGE_COUNT + COLUMN_COUNT - 1) / COLUMN_COUNT), COLUMN_COUNT);
-        this.father = father;
+        super(father,
+            Math.floor((STAGE_COUNT + COLUMN_COUNT - 1) / COLUMN_COUNT),
+            COLUMN_COUNT
+        );
         for (let id of this.getIds()) {
             if (id < STAGE_COUNT) {
                 this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
@@ -20,7 +21,7 @@ export class ChooseStage extends Grid {
             }
         }
 
-        this.header.setText(-1, '请选择关卡');
+        this.header.setText('请选择关卡');
         this.footer.addTask(Cookie.count(), STAGE_COUNT, (now, max) => (now < max ? 0 : 1));
 
         this.input.click = (id) => {

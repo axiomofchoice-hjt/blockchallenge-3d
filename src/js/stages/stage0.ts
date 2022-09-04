@@ -6,14 +6,12 @@ export class Stage0 extends Grid {
     L: number;
     R: number;
     tag: boolean[];
-    father: Controller;
     constructor(father: Controller) {
-        super(7, 9);
-        this.father = father;
+        super(father, 7, 9);
         this.L = 0;
         this.R = this.size - 1;
         this.tag = genArray(this.size, () => false);
-        this.header.setText(father.stageId, '猜数游戏 请点击数字');
+        this.header.setText('猜数游戏 请点击数字');
 
         for (let id of this.getIds()) {
             this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });

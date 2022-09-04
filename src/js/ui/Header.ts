@@ -1,3 +1,6 @@
+import { StageInterface } from "../stages/StageInterface";
+import { print } from "./util";
+
 function toChinese(x: number): string {
     var mp = [
         "零", "一", "二", "三", "四",
@@ -13,7 +16,9 @@ function toChinese(x: number): string {
 
 export class Header {
     dom: HTMLDivElement;
-    constructor() {
+    father: StageInterface;
+    constructor(father: StageInterface) {
+        this.father = father;
         this.dom = document.createElement('div');
         this.dom.id = 'header';
         this.dom.style.position = 'fixed';
@@ -24,11 +29,11 @@ export class Header {
         this.dom.style.fontFamily = 'Arial';
         document.body.appendChild(this.dom);
     }
-    setText(stageId: number, text: string) {
-        if (stageId === -1) {
+    setText(text: string) {
+        if (this.father.father.stageId === -1) {
             this.dom.innerText = text;
         } else {
-            this.dom.innerText = "第" + toChinese(stageId + 1) + "关 " + text;
+            this.dom.innerText = "第" + toChinese(this.father.father.stageId + 1) + "关 " + text;
         }
         return Header;
     }

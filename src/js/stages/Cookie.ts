@@ -1,5 +1,5 @@
 import { print } from "../ui/util";
-import { STAGE_COUNT } from './chooseStage';
+import { STAGE_COUNT } from './ChooseStage';
 
 var ok: boolean[] = [];
 
@@ -40,8 +40,10 @@ export class Cookie {
     }
     static set(id: number) {
         console.assert(id >= 0 && id < STAGE_COUNT, 'Cookie.set fail');
-        ok[id] = true;
-        save();
+        if (ok[id] === false) {
+            ok[id] = true;
+            save();
+        }
     }
     static clear() {
         for (let i = 0; i < STAGE_COUNT; i++) {
