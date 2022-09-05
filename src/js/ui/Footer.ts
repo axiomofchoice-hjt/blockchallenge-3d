@@ -1,6 +1,6 @@
 import { Cookie } from "../stages/Cookie";
 import { StageInterface } from "../stages/StageInterface";
-import { textBlack, textGreen, textRed } from "./util";
+import { print, textBlack, textGreen, textRed } from "./util";
 
 class Task {
     dom: HTMLSpanElement;
@@ -17,22 +17,17 @@ class Task {
         this.max = max;
         this.check = check;
         this.father = father;
-
-        this.update();
     }
     add(k: number) {
         this.now += k;
-        this.update();
     }
     set(k: number) {
         this.now = k;
-        this.update();
     }
     update() {
         let check = this.check(this.now, this.max);
         this.dom.style.color = check == 1 ? textGreen : check == 0 ? textBlack : textRed;
         this.dom.innerText = `[${this.now}/${this.max}]`;
-        this.father.update();
     }
 }
 
@@ -78,8 +73,11 @@ export class Footer {
 
         this.tasks = [];
     }
-    addTask(now: number, max: number, check: (now: number, max: number) => number) {
-        this.tasks.push(new Task(this, now, max, check));
+    setTasks(...tasks: [number, number, (now: number, max: number) => number][]) {
+        for (let task of tasks) {
+            this.tasks.push(new Task(this, task[0], task[1], task[2]));
+        }
+        this.update();
     }
     completed(): boolean {
         for (let task of this.tasks) {
@@ -90,6 +88,9 @@ export class Footer {
         return true;
     }
     update() {
+        for (let task of this.tasks) {
+            task.update();
+        }
         this.completeSpan.style.display = (this.completed() ? 'inline' : 'none');
 
         if (this.completed() && this.father.father.stageId >= 0) {
@@ -99,4 +100,4 @@ export class Footer {
     drop() {
         this.dom.remove();
     }
-};
+}

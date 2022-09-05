@@ -16,8 +16,10 @@ export class Stage0 extends Grid {
         for (let id of this.getIds()) {
             this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
         }
-        this.footer.addTask(0, 1, (x, n) => (x == n ? 1 : 0));
-        this.footer.addTask(0, 6, (x, n) => (x > n) ? -1 : 1);
+        this.footer.setTasks(
+            [0, 1, (x, n) => (x == n ? 1 : 0)],
+            [0, 6, (x, n) => (x > n) ? -1 : 1]
+        );
         this.input.click = (id: number) => {
             if (this.tag[id]) { return; }
             this.tag[id] = true;
@@ -39,6 +41,7 @@ export class Stage0 extends Grid {
                     this.R = id - 1;
                 }
             }
+            this.footer.update();
         };
     }
 }

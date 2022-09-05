@@ -7,6 +7,7 @@ import { StageInterface } from './StageInterface';
 import { Header } from '../ui/Header';
 import { Footer } from '../ui/Footer';
 import { Controller } from './Controller';
+import { ButtonList } from '../ui/ButtonList';
 
 const ZOOM = 120;
 
@@ -26,6 +27,7 @@ export class Grid implements StageInterface {
     public input: Input;
     public header: Header;
     public footer: Footer;
+    buttonList: ButtonList;
     father: Controller;
     constructor(father: Controller, n: number, m: number) {
         this.father = father;
@@ -48,6 +50,7 @@ export class Grid implements StageInterface {
         };
         this.header = new Header(this);
         this.footer = new Footer(this);
+        this.buttonList = new ButtonList(this);
         // this.header.setText("23333");
         // this.footer.addTask(2, 3, '#000');
         this.scene.changed = true;
@@ -108,7 +111,7 @@ export class Grid implements StageInterface {
             let box = new Box(100, 100, height, this.scene);
             let [x, y] = this.getPosition(id);
             box.position.set(x, y, z[id]);
-            box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 200 });
+            box.animes.positionTo(new Vector3(x, y, height / 2), { speed: 400 });
             boxes.push(box);
             box.index = id;
         }
@@ -126,6 +129,7 @@ export class Grid implements StageInterface {
         }
         this.header.drop();
         this.footer.drop();
+        this.buttonList.drop();
         this.scene.changed = true;
     }
 }

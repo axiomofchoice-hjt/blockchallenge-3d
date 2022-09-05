@@ -9,8 +9,12 @@ function toChinese(x: number): string {
     if (x < 10) return mp[x];
     if (x == 10) return "十";
     if (x < 20) return "十" + mp[x % 10];
-    if (x % 10 != 0) return mp[Math.floor(x / 10)] + "十" + mp[x % 10];
-    if (x % 10 == 0) return mp[Math.floor(x / 10)] + "十";
+    if (x % 10 != 0) {
+        return mp[Math.floor(x / 10)] + "十" + mp[x % 10];
+    }
+    if (x % 10 == 0) {
+        return mp[Math.floor(x / 10)] + "十";
+    }
     return "??";
 }
 

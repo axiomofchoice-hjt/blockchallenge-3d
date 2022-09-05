@@ -22,7 +22,9 @@ export class ChooseStage extends Grid {
         }
 
         this.header.setText('请选择关卡');
-        this.footer.addTask(Cookie.count(), STAGE_COUNT, (now, max) => (now < max ? 0 : 1));
+        this.footer.setTasks(
+            [Cookie.count(), STAGE_COUNT, (now, max) => (now < max ? 0 : 1)]
+        );
 
         this.input.click = (id) => {
             if (id < STAGE_COUNT) {
