@@ -81,4 +81,9 @@ export const
 
 export const
     eqTask = (x: number, n: number) => (x == n ? 1 : 0),
+    geTask = (x: number, n: number) => (x >= n ? 1 : 0),
     leIncreasingTask = (x: number, n: number) => (x <= n ? 1 : -1)
+
+export function random(n:number):number {
+    return Math.floor(Math.random() * n)
+}

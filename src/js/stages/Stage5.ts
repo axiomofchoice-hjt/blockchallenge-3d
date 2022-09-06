@@ -11,7 +11,7 @@ export default class Stage extends Grid {
         this.L = 0;
         this.R = this.size - 1;
         this.tag = genArray(this.size, () => -1);
-        this.header.setText('[null]');
+        this.header.setText('吃金币游戏 请点击方向键 注意隐藏操作');
 
         this.footer.setTasks(
             [0, 1, eqTask],
