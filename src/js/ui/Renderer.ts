@@ -5,10 +5,10 @@ import { Scene } from './Scene';
 export class Renderer {
     public renderer: THREE.WebGLRenderer;
     constructor() {
-        this.renderer = this._getRenderer();
+        this.renderer = Renderer._getRenderer();
         this.fitWindow();
     }
-    _getRenderer(): THREE.WebGLRenderer {
+    static _getRenderer(): THREE.WebGLRenderer {
         let renderer = new THREE.WebGLRenderer({ canvas: canvas(), antialias: true });
         renderer.setClearColor("#B0FFFF", 1);
 
@@ -24,5 +24,9 @@ export class Renderer {
             this.renderer.render(scene.scene, scene.camera);
             scene.changed = false;
         }
+    }
+    drop() {
+        this.renderer.dispose();
+        // this.renderer.forceContextLoss();
     }
 }

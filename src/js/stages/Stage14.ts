@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CylinderGeometry } from 'three';
 import { Grid, ZOOM } from "../stageBase/Grid";
 import { Cylinder } from '../ui/Cylinder';
 import { Material } from '../ui/Material';
@@ -9,9 +10,12 @@ export default class Stage extends Grid {
     tag: number[];
     lines: THREE.Line[];
     cylinders: Cylinder[];
+    cylinderGeometry: CylinderGeometry;
 
     constructor(father: Controller) {
         super(father, 7, 7, false);
+        this.cylinderGeometry = new THREE.CylinderGeometry(50, 50, 20, 20);
+
         this.boxes = this.genMarchingBoxes(2, 0, 0);
         for (let box of this.boxes) {
             box.animes.opacityTo(0, { immediately: true });
@@ -52,8 +56,8 @@ export default class Stage extends Grid {
         }
 
         for (let i of this.getIds()) {
-            let cylinder = new Cylinder(50, 20, this.scene);
-            cylinder.animes.positionTo([...this.getPosition(i), 10], { immediately: true });
+            let cylinder = new Cylinder(this.cylinderGeometry, this.scene);
+            cylinder.animes.positionTo([...this.getPosition(i), 100], { immediately: true });
             cylinder.animes.opacityTo(0, { immediately: true });
             this.cylinders.push(cylinder);
         }
@@ -64,7 +68,8 @@ export default class Stage extends Grid {
                 (x === 0 ? 1 : 0) + (x === 6 ? 1 : 0) + (y === 0 ? 1 : 0) + (y === 6 ? 1 : 0) === 1 ||
                 (x === 3 && y === 3)) {
                 this.tag[i] = -1;
-                this.cylinders[i].animes.opacityTo(1, { immediately: true });
+                this.cylinders[i].animes.opacityTo(1, { duration: 0.4 });
+                this.cylinders[i].animes.positionTo([this.cylinders[i].position.x, this.cylinders[i].position.y, 10], { duration: 0.4 });
             }
         }
 
@@ -112,13 +117,19 @@ export default class Stage extends Grid {
                 kill(1, nextTag);
                 kill(-1, nextTag);
             }
-            this.tag = nextTag;
             for (let i of this.getIds()) {
-                if (this.tag[i]) {
-                    this.cylinders[i].animes.bgColorTo(this.tag[i] === 1 ? grey : white, { immediately: true });
+                if (this.tag[i] !== nextTag[i]) {
+                    if (nextTag[i]) {
+                        this.cylinders[i].animes.bgColorTo(nextTag[i] === 1 ? grey : white, { immediately: true });
+                        this.cylinders[i].animes.opacityTo(1, { duration: 0.4 });
+                        this.cylinders[i].animes.positionTo([this.cylinders[i].position.x, this.cylinders[i].position.y, 10], { duration: 0.4 });
+                    } else {
+                        this.cylinders[i].animes.opacityTo(0, { duration: 0.4 });
+                        this.cylinders[i].animes.positionTo([this.cylinders[i].position.x, this.cylinders[i].position.y, 100], { duration: 0.4 });
+                    }
                 }
-                this.cylinders[i].animes.opacityTo(this.tag[i] ? 1 : 0);
             }
+            this.tag = nextTag;
 
             this.footer.tasks[0].set(0);
             for (let i of this.getIds()) {
@@ -129,14 +140,5 @@ export default class Stage extends Grid {
 
             this.footer.update();
         };
-    }
-    drop() {
-        super.drop();
-        for (let line of this.lines) {
-            this.scene.scene.remove(line);
-        }
-        for (let mesh of this.cylinders) {
-            this.scene.scene.remove(mesh);
-        }
     }
 }

@@ -158,10 +158,4 @@ export default class Stage extends Grid {
             this.footer.update();
         };
     }
-    drop() {
-        super.drop();
-        for (let mesh of this.extraMeshs) {
-            this.scene.scene.remove(mesh);
-        }
-    }
 }

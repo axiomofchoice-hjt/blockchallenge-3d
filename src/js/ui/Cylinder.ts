@@ -66,9 +66,9 @@ export class Cylinder extends THREE.Mesh {
     public _bgColor: Color;
     scene: Scene;
     animes: CylinderAnimation;
-    constructor(r: number, h: number, scene: Scene) {
+    constructor(geometry:THREE.CylinderGeometry, scene: Scene) {
         super(
-            new THREE.CylinderGeometry(r, r, h, 20),
+            geometry,
             Material.solid()
         );
         this._bgColor = new Color('#ffffff', () => {

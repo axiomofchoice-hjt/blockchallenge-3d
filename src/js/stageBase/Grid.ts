@@ -127,12 +127,10 @@ export class Grid implements StageInterface {
         this.renderer.render(this.scene);
     }
     drop() {
-        for (let i of this.boxes) {
-            this.scene.scene.remove(i);
-        }
         this.header.drop();
         this.footer.drop();
         this.buttonList.drop();
-        this.scene.changed = true;
+        this.scene.drop();
+        this.renderer.drop();
     }
 }
