@@ -66,7 +66,7 @@ export const DIRECTION = [
 export const
     black = "Black",
     white = "White",
-    grey = "LightGrey",
+    grey = "Grey",
     yellow = "Gold",
     red = "Tomato",
     green = "LimeGreen",

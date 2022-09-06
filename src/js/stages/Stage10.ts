@@ -1,46 +1,69 @@
 import { Grid } from "../stageBase/Grid";
-import { black, blue, eqTask, genArray, leIncreasingTask, print, range, rangeMatrix, red, yellow } from "../ui/util";
+import { black, blue, eqTask, genArray, geTask, grey, leIncreasingTask, orange, print, range, rangeMatrix, red, white, yellow } from "../ui/util";
 import { Controller } from "./Controller";
 
 export default class Stage extends Grid {
-    tag: number[];
+    tag: boolean[];
+
     constructor(father: Controller) {
-        super(father, 4, 5);
-        this.tag = genArray(this.size, () => 0);
-        this.header.setText('填充游戏 请点击方块 注意隐藏操作');
+        super(father, 7, 7);
+        this.tag = genArray(this.size, () => false);
+        this.header.setText('色彩游戏 请点击方块');
 
         this.footer.setTasks(
-            [0, 20, eqTask],
-            [0, 3, leIncreasingTask]
+            [0, 13, geTask],
+            [0, 13, geTask],
+            [49, 13, geTask]
         );
+
+        for (let i of this.getIds()) {
+            this.boxes[i].animes.bgColorTo(yellow, { immediately: true });
+        }
+
         this.input.click = (id: number) => {
-            if (this.tag[id] === 2) { return; }
-            let [x, y] = this.getXY(id);
-            this.footer.tasks[1].add(1);
-            if (this.tag[id] === 0) {
-                for (let ptr of this.getIds()) {
-                    let [i, j] = this.getXY(ptr);
-                    if ((i == x || j == y) && this.tag[ptr] !== 1) {
-                        this.boxes[ptr].animes.bgColorTo(blue)
-                        this.tag[ptr] = 1;
+            this.tag[id] = !this.tag[id];
+
+            this.footer.tasks[0].set(0);
+            this.footer.tasks[1].set(0);
+            this.footer.tasks[2].set(0);
+
+            let vis = genArray(this.size, () => false);
+
+            for (let j of range(this.m)) {
+                for (let i of range(this.n)) {
+                    let ptr = this.getId(i, j);
+                    if (this.tag[ptr]) {
+                        break;
                     }
-                }
-            } else {
-                for (let ptr of this.getIds()) {
-                    let [i, j] = this.getXY(ptr);
-                    if (Math.abs(i - x) <= 1 && Math.abs(j - y) <= 1 && this.tag[ptr] !== 2) {
-                        this.boxes[ptr].animes.bgColorTo(yellow)
-                        this.tag[ptr] = 2;
+                    if (!vis[ptr]) {
+                        vis[ptr] = true;
+                        this.boxes[ptr].animes.bgColorTo(yellow);
+                        this.footer.tasks[2].add(1);
                     }
                 }
             }
-            let cnt = 0;
+            for (let i of range(this.n)) {
+                for (let j of range(this.m)) {
+                    let ptr = this.getId(i, j);
+                    if (this.tag[ptr]) {
+                        break;
+                    }
+                    if (!vis[ptr]) {
+                        vis[ptr] = true;
+                        this.boxes[ptr].animes.bgColorTo(blue);
+                        this.footer.tasks[1].add(1);
+                    }
+                }
+            }
             for (let i of this.getIds()) {
-                if (this.tag[i] !== 0) {
-                    cnt++;
+                if (!vis[i]) {
+                    this.boxes[i].animes.bgColorTo(this.tag[i] ? grey : white);
+                    if (!this.tag[i]) {
+                        this.footer.tasks[0].add(1);
+                    }
                 }
             }
-            this.footer.tasks[0].set(cnt);
+
             this.footer.update();
         };
     }

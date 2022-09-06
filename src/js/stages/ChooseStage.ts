@@ -13,10 +13,10 @@ export class ChooseStage extends Grid {
         );
         for (let id of this.getIds()) {
             if (id < STAGE_COUNT) {
-                this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
-                this.boxes[id].animes.bgColorTo(Cookie.get(id) ? yellow : white, { duration: 0 });
+                this.boxes[id].animes.contentTo(id + 1, black, { immediately: true });
+                this.boxes[id].animes.bgColorTo(Cookie.get(id) ? yellow : white, { immediately: true });
             } else {
-                this.boxes[id].animes.opacityTo(0, { duration: 0 });
+                this.boxes[id].animes.opacityTo(0, { immediately: true });
             }
         }
 

@@ -11,26 +11,31 @@ export default class Stage extends Grid {
 
         var gen = (value: number, num: number) => {
             for (let i = 0; i < num; i++) {
-                let id = random(this.size)
+                let id = random(this.size);
                 while (this.tag[id]) {
-                    id = random(this.size)
+                    id = random(this.size);
                 }
                 this.tag[id] = value;
                 if (value === 2) {
-                    this.boxes[id].animes.bgColorTo(yellow, { duration: 0 });
-                    this.boxes[id].animes.contentTo('Au', black, { duration: 0 });
+                    this.boxes[id].animes.bgColorTo(yellow, { immediately: true });
+                    this.boxes[id].animes.contentTo('Au', black, { immediately: true });
                 } else if (value === 1) {
-                    this.boxes[id].animes.bgColorTo(green, { duration: 0 });
-                    this.boxes[id].animes.contentTo('+1', black, { duration: 0 });
+                    this.boxes[id].animes.bgColorTo(green, { immediately: true });
+                    this.boxes[id].animes.contentTo('+1', black, { immediately: true });
                 } else {
-                    this.boxes[id].animes.bgColorTo(red, { duration: 0 });
-                    this.boxes[id].animes.contentTo('-1', black, { duration: 0 });
+                    this.boxes[id].animes.bgColorTo(red, { immediately: true });
+                    this.boxes[id].animes.contentTo('-1', black, { immediately: true });
                 }
             }
         };
         gen(-1, 2);
         gen(1, 2);
         gen(2, 10);
+        for (let i of this.getIds()) {
+            if (this.tag[i] === 0) {
+                this.boxes[i].animes.opacityTo(0, { immediately: true });
+            }
+        }
 
         this.footer.setTasks(
             [0, 2000, eqTask]
@@ -45,8 +50,7 @@ export default class Stage extends Grid {
                 this.footer.tasks[0].now *= 2;
             }
             this.tag[id] = 0;
-            this.boxes[id].animes.bgColorTo(white);
-            this.boxes[id].animes.contentTo('');
+            this.boxes[id].animes.opacityTo(0);
             this.footer.update();
         };
     }

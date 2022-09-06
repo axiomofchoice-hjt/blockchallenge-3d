@@ -1,6 +1,6 @@
 import { height, print, width, range, shuffle } from '../ui/util';
 import { Box } from '../ui/Box';
-import { Scene } from '../ui/Scene';
+import { ANGLE_OF_HEIGHT, ANGLE_OF_VIEW, Scene } from '../ui/Scene';
 import { Vector3 } from 'three';
 import { Renderer } from '../ui/Renderer';
 import { StageInterface } from './StageInterface';
@@ -9,7 +9,7 @@ import { Footer } from '../ui/Footer';
 import { Controller } from '../stages/Controller';
 import { ButtonList } from '../ui/ButtonList';
 
-const ZOOM = 120;
+export const ZOOM = 120;
 
 // 输入事件
 export interface Input {
@@ -29,14 +29,14 @@ export class Grid implements StageInterface {
     public footer: Footer;
     buttonList: ButtonList;
     father: Controller;
-    constructor(father: Controller, n: number, m: number) {
+    constructor(father: Controller, n: number, m: number, genBoxes: boolean = true) {
         this.father = father;
         this.n = n;
         this.m = m;
         this.renderer = new Renderer();
         this.scene = new Scene();
         this.fitWindow();
-        this.boxes = this.getMarchingBoxes(10, -300, -50);
+        this.boxes = genBoxes ? this.genMarchingBoxes(10, -300, -50) : [];
         // for (let id of this.getIds()) {
         //     this.boxes[id].contents[0].text = id;
         // }
@@ -59,15 +59,15 @@ export class Grid implements StageInterface {
         this.scene.fitWindow();
         this.renderer.fitWindow();
 
-        let bottomAngle = Scene.ANGLE_OF_VIEW / 2 / 180 * Math.PI;
+        let bottomAngle = ANGLE_OF_VIEW / 2 / 180 * Math.PI;
         let bottom = ZOOM * (this.n + 1) / 2;
-        let sideAngle = Scene.ANGLE_OF_HEIGHT;
+        let sideAngle = ANGLE_OF_HEIGHT;
         let side = bottom * Math.sin(sideAngle) / Math.sin(bottomAngle);
         let outerAngle = bottomAngle + sideAngle;
         let z = side * Math.sin(outerAngle);
         let y = -z / Math.tan(sideAngle);
 
-        let tanTopAngle = Math.tan(Scene.ANGLE_OF_VIEW / 2 / 180 * Math.PI) / height() * width();
+        let tanTopAngle = Math.tan(ANGLE_OF_VIEW / 2 / 180 * Math.PI) / height() * width();
         let widthBottom = ZOOM * (this.m + 2) / 2;
         if (z < widthBottom / tanTopAngle) {
             z = widthBottom / tanTopAngle;
@@ -97,13 +97,13 @@ export class Grid implements StageInterface {
         // print(i, j);
         return [(j - this.m / 2 + 0.5) * ZOOM, -(i - this.n / 2 + 0.5) * ZOOM];
     }
-    getBox(id: number, height: number): Box {
+    genBox(id: number, height: number): Box {
         let box = new Box(100, 100, height, this.scene);
         let [x, y] = this.getPosition(id);
         box.position.set(x, y, height / 2);
         return box;
     }
-    getMarchingBoxes(height: number, l: number, r: number): Box[] {
+    genMarchingBoxes(height: number, l: number, r: number): Box[] {
         let z = [];
         for (let i of range(this.n * this.m)) {
             z.push(l + (r - l) * i / (this.n * this.m));

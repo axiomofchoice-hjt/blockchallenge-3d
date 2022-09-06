@@ -18,7 +18,7 @@ export default class Stage extends Grid {
             [0, 15, leIncreasingTask]
         );
         for (let id of this.getIds()) {
-            this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
+            this.boxes[id].animes.contentTo(id + 1, black, { immediately: true });
         }
         this.input.click = (id: number) => {
             let Min = 0;

@@ -8,6 +8,7 @@ export interface AnimationArgs {
     onUpdate?: () => void;
     onComplete?: () => void;
     delay?: number;
+    immediately?: boolean;
 }
 
 export class Animation {
@@ -39,6 +40,16 @@ export class Animation {
         if (this.tween !== null) {
             this.tween.kill();
         }
+
+        if (args.immediately) {
+            for (let i = 0; i < this.attr.length; i++) {
+                if (to[i] !== null) {
+                    this.target[this.attr[i]] = to[i];
+                }
+            }
+            return;
+        }
+
         args = {
             onUpdate: () => { },
             onComplete: () => { },

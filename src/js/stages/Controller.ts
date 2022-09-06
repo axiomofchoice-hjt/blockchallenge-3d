@@ -8,7 +8,6 @@ import Stage4 from "./Stage4";
 import Stage5 from "./Stage5";
 import Stage6 from "./Stage6";
 import Stage7 from "./Stage7";
-//---
 import Stage8 from "./Stage8";
 import Stage9 from "./Stage9";
 import Stage10 from "./Stage10";
@@ -49,8 +48,9 @@ export class Controller {
         this.stageId = id;
         if (id == -1) {
             this.stage = new ChooseStage(this);
+        } else {
+            this.stage = new this.stages[id](this);
         }
-        this.stage = new this.stages[id](this);
     }
     backEvent() {
         if (this.stageId == -1) {
