@@ -6,7 +6,7 @@ import { Renderer } from '../ui/Renderer';
 import { StageInterface } from './StageInterface';
 import { Header } from '../ui/Header';
 import { Footer } from '../ui/Footer';
-import { Controller } from './Controller';
+import { Controller } from '../stages/Controller';
 import { ButtonList } from '../ui/ButtonList';
 
 const ZOOM = 120;
@@ -83,14 +83,17 @@ export class Grid implements StageInterface {
     getId(i: number, j: number): number {
         return i * this.m + j;
     }
-    getIndex(id: number): [number, number] {
+    getXY(id: number): [number, number] {
         return [Math.floor(id / this.m), id % this.m];
     }
     getIds(): Iterable<number> {
         return range(this.n * this.m);
     }
+    inArea(x: number, y: number): boolean {
+        return 0 <= x && x < this.n && 0 <= y && y < this.m;
+    }
     getPosition(id: number): [number, number] {
-        let [i, j] = this.getIndex(id);
+        let [i, j] = this.getXY(id);
         // print(i, j);
         return [(j - this.m / 2 + 0.5) * ZOOM, -(i - this.n / 2 + 0.5) * ZOOM];
     }

@@ -1,5 +1,5 @@
-import { Cookie } from "../stages/Cookie";
-import { StageInterface } from "../stages/StageInterface";
+import { Cookie } from "../stageBase/Cookie";
+import { StageInterface } from "../stageBase/StageInterface";
 import { print, textBlack, textGreen, textRed } from "./util";
 
 class Task {
@@ -23,6 +23,9 @@ class Task {
     }
     set(k: number) {
         this.now = k;
+    }
+    ok(): boolean {
+        return this.check(this.now, this.max) === 1;
     }
     update() {
         let check = this.check(this.now, this.max);

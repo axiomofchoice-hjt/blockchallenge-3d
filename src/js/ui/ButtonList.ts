@@ -1,4 +1,4 @@
-import { StageInterface } from "../stages/StageInterface";
+import { StageInterface } from "../stageBase/StageInterface";
 import { print } from "./util";
 
 export class ButtonList {

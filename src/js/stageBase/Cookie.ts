@@ -1,5 +1,5 @@
 import { print } from "../ui/util";
-import { STAGE_COUNT } from './ChooseStage';
+import { STAGE_COUNT } from '../stages/Controller';
 
 var ok: boolean[] = [];
 

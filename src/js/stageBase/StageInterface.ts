@@ -1,6 +1,6 @@
 import { Input } from "./Grid";
 import { Scene } from "../ui/Scene";
-import { Controller } from "./Controller";
+import { Controller } from "../stages/Controller";
 
 export interface StageInterface {
     father: Controller;

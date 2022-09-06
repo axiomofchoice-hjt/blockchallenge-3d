@@ -1,9 +1,8 @@
 import { black, print, white, yellow } from '../ui/util';
-import { Controller } from './Controller';
-import { Cookie } from './Cookie';
-import { Grid } from './Grid';
+import { Controller, STAGE_COUNT } from './Controller';
+import { Cookie } from '../stageBase/Cookie';
+import { Grid } from '../stageBase/Grid';
 
-export const STAGE_COUNT = 1;
 const COLUMN_COUNT = 5;
 
 export class ChooseStage extends Grid {

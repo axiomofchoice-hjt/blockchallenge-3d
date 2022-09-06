@@ -1,8 +1,8 @@
-import { Grid } from "./Grid";
-import { black, blue, genArray, red, yellow } from "../ui/util";
+import { Grid } from "../stageBase/Grid";
+import { black, blue, eqTask, genArray, leIncreasingTask, red, yellow } from "../ui/util";
 import { Controller } from "./Controller";
 
-export class Stage0 extends Grid {
+export default class Stage extends Grid {
     L: number;
     R: number;
     tag: boolean[];
@@ -13,13 +13,13 @@ export class Stage0 extends Grid {
         this.tag = genArray(this.size, () => false);
         this.header.setText('猜数游戏 请点击数字');
 
+        this.footer.setTasks(
+            [0, 1, eqTask],
+            [0, 6, leIncreasingTask]
+        );
         for (let id of this.getIds()) {
             this.boxes[id].animes.contentTo(id + 1, black, { duration: 0 });
         }
-        this.footer.setTasks(
-            [0, 1, (x, n) => (x == n ? 1 : 0)],
-            [0, 6, (x, n) => (x > n) ? -1 : 1]
-        );
         this.input.click = (id: number) => {
             if (this.tag[id]) { return; }
             this.tag[id] = true;

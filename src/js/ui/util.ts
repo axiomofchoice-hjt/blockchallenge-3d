@@ -78,3 +78,7 @@ export const
     textGreen = "#080",
     textRed = "Red",
     textBlack = "Black";
+
+export const
+    eqTask = (x: number, n: number) => (x == n ? 1 : 0),
+    leIncreasingTask = (x: number, n: number) => (x <= n ? 1 : -1)
