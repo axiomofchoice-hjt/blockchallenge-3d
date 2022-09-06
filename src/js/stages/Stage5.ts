@@ -1,5 +1,5 @@
 import { Grid } from "../stageBase/Grid";
-import { black, blue, eqTask, genArray, leIncreasingTask, red, yellow } from "../ui/util";
+import { eqTask, genArray } from "../ui/util";
 import { Controller } from "./Controller";
 
 export default class Stage extends Grid {

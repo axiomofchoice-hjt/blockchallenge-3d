@@ -97,7 +97,7 @@ export default class Stage extends Grid {
                 box.position.z = Math.random() * (300 - 50) + 50;
                 box.animes.positionTo([pos[0], pos[1], 10], { speed: 400 });
                 box.animes.bgColorTo(yellow, { immediately: true });
-                this.extraMeshs.push(box);
+                this.boxes.push(box);
             }
         }
 
@@ -115,6 +115,9 @@ export default class Stage extends Grid {
                 let flag = true;
                 for (let box of this.boxes) {
                     let [i, j] = this.getXY(box.index);
+                    if (i === 0 || i === 5 || j === 0 || j === 5) {
+                        continue;
+                    }
                     if (check(i, j) && (i + dx === 0 || i + dx === 5 || j + dy === 0 || j + dy === 5)) {
                         flag = false;
                         break;
@@ -123,6 +126,9 @@ export default class Stage extends Grid {
                 if (flag) {
                     for (let box of this.boxes) {
                         let [i, j] = this.getXY(box.index);
+                        if (i === 0 || i === 5 || j === 0 || j === 5) {
+                            continue;
+                        }
                         if (check(i, j)) {
                             box.index = this.getId(i + dx, j + dy);
                             box.animes.positionTo([...this.getPosition(box.index), 10], { speed: 120 / 0.2 });

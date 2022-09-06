@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "serve": "parcel src/index.html --port 8080",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html --no-minify --public-url /blockchallenge-3d/"
   },
   "author": "axiomofchoice",
   "license": "MIT",

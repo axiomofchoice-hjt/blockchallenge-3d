@@ -45,7 +45,7 @@ export class Scene {
         this.changed = true;
         Animation.scene = this;
     }
-    add(mesh: THREE.Mesh) {
+    add(mesh: THREE.Mesh | THREE.Line) {
         this.scene.add(mesh);
     }
     fitWindow() {

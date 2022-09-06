@@ -10,7 +10,7 @@ export default class Stage extends Grid {
         this.header.setText('开关游戏 请点击左侧方块');
 
         this.footer.setTasks(
-            [0, 12, eqTask]
+            [7, 12, eqTask]
         );
 
         var find = (check: (x: number, y: number) => boolean) => {

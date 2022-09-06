@@ -27,7 +27,7 @@ function clickEvent(event: MouseEvent) {
     mouse.x = (event.clientX / width()) * 2 - 1;
     mouse.y = -(event.clientY / height()) * 2 + 1;
     raycaster.setFromCamera(mouse, controller.stage.scene.camera);
-    var intersects = raycaster.intersectObjects(controller.stage.scene.scene.children);
+    var intersects = raycaster.intersectObjects(controller.stage.boxes);
     if (intersects.length) {
         var box = intersects[0].object;
         if (box instanceof Box) {
