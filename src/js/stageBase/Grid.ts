@@ -47,6 +47,13 @@ export class Grid implements StageInterface {
             // direction(dir) {
             //     print(dir);
             // }
+            key: (code) => {
+                if (code === 'Backspace') {
+                    this.father.backEvent();
+                } else if (code === 'KeyR') {
+                    this.father.restartEvent();
+                }
+            }
         };
         this.header = new Header(this);
         this.footer = new Footer(this);
