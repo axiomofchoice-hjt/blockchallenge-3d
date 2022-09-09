@@ -14,39 +14,20 @@ export interface AnimationArgs {
 export class Animation {
     static scene: Scene;
     public target: any;
-    public attr: string[];
+    public attr: string;
     public tween: gsap.core.Tween | null;
-    constructor(target: any, attr: string | string[]) {
+    constructor(target: any, attr: string) {
         this.target = target;
-        if (!Array.isArray(attr)) {
-            attr = [attr];
-        }
         this.attr = attr;
         this.tween = null;
     }
-    load(to: number | number[], args: AnimationArgs = {}) {
-        if (!Array.isArray(to)) {
-            to = [to];
-        }
-        console.assert(
-            this.attr.length === to.length,
-            "attr.length !== to.length fail"
-        );
-        for (let i = 0; i < this.attr.length; i++) {
-            if (to[i] === null) {
-                to[i] = this.target[this.attr[i]];
-            }
-        }
+    load(to: number, args: AnimationArgs = {}) {
         if (this.tween !== null) {
             this.tween.kill();
         }
 
         if (args.immediately) {
-            for (let i = 0; i < this.attr.length; i++) {
-                if (to[i] !== null) {
-                    this.target[this.attr[i]] = to[i];
-                }
-            }
+            this.target[this.attr] = to;
             return;
         }
 
@@ -59,10 +40,9 @@ export class Animation {
 
         let vars: any = {};
         let dis: number = 0;
-        for (let i = 0; i < this.attr.length; i++) {
-            vars[this.attr[i]] = to[i];
-            dis = Math.max(dis, Math.abs(this.target[this.attr[i]] - to[i]));
-        }
+
+        vars[this.attr] = to;
+        dis = Math.max(dis, Math.abs(this.target[this.attr] - to));
 
         vars.duration = 10000;
         if (

@@ -28,33 +28,55 @@ class Color {
 
 class CylinderAnimation {
     private cylinder: Cylinder;
-    private position: Animation;
-    private bgColor: Animation;
-    private scale: Animation;
+    private position: [Animation, Animation, Animation];
+    private bgColor: [Animation, Animation, Animation];
+    private scale: [Animation, Animation, Animation];
     private opacity: Animation;
     constructor(cylinder: Cylinder) {
         this.cylinder = cylinder;
-        this.position = new Animation(this.cylinder.position, ['x', 'y', 'z']);
-        this.bgColor = new Animation(this.cylinder._bgColor, ['r', 'g', 'b']);
-        this.scale = new Animation(this.cylinder.scale, ['x', 'y', 'z']);
+        this.position = [
+            new Animation(this.cylinder.position, 'x'),
+            new Animation(this.cylinder.position, 'y'),
+            new Animation(this.cylinder.position, 'z')
+        ];
+        this.bgColor = [
+            new Animation(this.cylinder._bgColor, 'r'),
+            new Animation(this.cylinder._bgColor, 'g'),
+            new Animation(this.cylinder._bgColor, 'b')
+        ];
+        this.scale = [
+            new Animation(this.cylinder.scale, 'x'),
+            new Animation(this.cylinder.scale, 'y'),
+            new Animation(this.cylinder.scale, 'z')
+        ];
         this.opacity = new Animation(this.cylinder, 'opacity');
     }
     positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs = {}) {
         if (to instanceof THREE.Vector3) {
-            this.position.load([to.x, to.y, to.z], args);
+            this.position[0].load(to.x, args);
+            this.position[1].load(to.y, args);
+            this.position[2].load(to.z, args);
         } else {
-            this.position.load(to, args);
+            this.position[0].load(to[0], args);
+            this.position[1].load(to[1], args);
+            this.position[2].load(to[2], args);
         }
     }
     bgColorTo(to: THREE.ColorRepresentation, args: AnimationArgs = {}) {
         to = new THREE.Color(to);
-        this.bgColor.load([to.r, to.g, to.b], args);
+        this.bgColor[0].load(to.r, args);
+        this.bgColor[1].load(to.g, args);
+        this.bgColor[2].load(to.b, args);
     }
     scaleTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs = {}) {
         if (to instanceof THREE.Vector3) {
-            this.scale.load([to.x, to.y, to.z], args);
+            this.scale[0].load(to.x, args);
+            this.scale[1].load(to.y, args);
+            this.scale[2].load(to.z, args);
         } else {
-            this.scale.load(to, args);
+            this.scale[0].load(to[0], args);
+            this.scale[1].load(to[1], args);
+            this.scale[2].load(to[2], args);
         }
     }
     opacityTo(to: number, args: AnimationArgs = {}) {
@@ -66,7 +88,7 @@ export class Cylinder extends THREE.Mesh {
     public _bgColor: Color;
     scene: Scene;
     animes: CylinderAnimation;
-    constructor(geometry:THREE.CylinderGeometry, scene: Scene) {
+    constructor(geometry: THREE.CylinderGeometry, scene: Scene) {
         super(
             geometry,
             Material.solid()
