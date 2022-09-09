@@ -22,7 +22,7 @@ export default class Stage extends Grid {
         }
 
         this.tag = genArray(this.size, () => 0);
-        this.header.setText('对称游戏 请点击方块');
+        this.header.setText('对称 请点击方块');
 
         this.cylinders = [];
         this.lines = [];

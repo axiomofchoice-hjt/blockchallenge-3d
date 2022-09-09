@@ -7,7 +7,7 @@ export default class Stage extends Grid {
     constructor(father: Controller) {
         super(father, 3, 4);
         this.tag = genArray(this.size, () => 0);
-        this.header.setText('点灯游戏 请点击方块');
+        this.header.setText('点灯 请点击方块');
 
         this.footer.setTasks(
             [0, 12, eqTask]

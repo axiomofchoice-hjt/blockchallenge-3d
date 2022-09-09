@@ -9,7 +9,7 @@ export default class Stage extends Grid {
         super(father, 7, 9);
         this.l = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         this.r = [1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1];
-        this.header.setText('找不同游戏 请点击左侧方块');
+        this.header.setText('找不同 请点击左侧方块');
 
         this.footer.setTasks(
             [10, 18, eqTask]

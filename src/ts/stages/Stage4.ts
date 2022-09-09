@@ -11,7 +11,7 @@ export default class Stage extends Grid {
         this.L = 0;
         this.R = this.size - 1;
         this.tag = genArray(this.size, () => -1);
-        this.header.setText('找零游戏 请点击数字 注：灰色方块的数字仅表示位置');
+        this.header.setText('找零 请点击数字 注：灰色方块的数字仅表示位置');
 
         this.footer.setTasks(
             [0, 1, eqTask],

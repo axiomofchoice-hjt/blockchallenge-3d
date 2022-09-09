@@ -102,7 +102,7 @@ export default class Stage extends Grid {
         }
 
         this.tag = genArray(this.size, () => false);
-        this.header.setText('推箱子游戏 请点击黄色方块');
+        this.header.setText('平移 请点击黄色方块');
 
         this.footer.setTasks(
             [3, 9, eqTask],
