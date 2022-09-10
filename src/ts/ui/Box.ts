@@ -84,6 +84,15 @@ class BoxAnimation {
             new Animation(this.box.contents[1], 'opacity')
         ];
     }
+    position2DTo(to: THREE.Vector2 | [number, number], args: AnimationArgs = {}) {
+        if (to instanceof THREE.Vector2) {
+            this.position[0].load(to.x, args);
+            this.position[1].load(to.y, args);
+        } else {
+            this.position[0].load(to[0], args);
+            this.position[1].load(to[1], args);
+        }
+    }
     positionTo(to: THREE.Vector3 | [number, number, number], args: AnimationArgs = {}) {
         if (to instanceof THREE.Vector3) {
             this.position[0].load(to.x, args);
@@ -131,6 +140,10 @@ class BoxAnimation {
 
         this.contents[0].load(1, args);
         this.contents[1].load(0, args);
+    }
+    visibleTo(to: boolean) {
+        this.box.visible = to;
+        Animation.scene.changed = true;
     }
 }
 

@@ -19,7 +19,6 @@ export default class Stage extends Grid {
             [0, 1, eqTask],
         );
 
-
         var test = (tag: number[]) => {
             for (let i = 0; i < tag.length - 1; i++) {
                 if (Math.abs(tag[i] - tag[i + 1]) === 1) {
