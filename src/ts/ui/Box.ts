@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { Material, TextArgs } from './Material';
 import { Animation, AnimationArgs } from './Animation';
 import { Scene } from './Scene';
+import { print } from './util';
 
 class Color {
     private _r: number;
@@ -126,6 +127,10 @@ class BoxAnimation {
         this.scaleTo(new THREE.Vector3(this.box.scale.x, this.box.scale.y, to / this.box.SIZE.z), args);
     }
     integerTo(to: number, args: AnimationArgs = {}) {
+        if (this.integer.tween !== null) {
+            this.integer.tween.kill();
+        }
+        this.integer = new Animation(this.box.contents[0], 'text');
         this.integer.load(to, args);
     }
     opacityTo(to: number, args: AnimationArgs = {}) {

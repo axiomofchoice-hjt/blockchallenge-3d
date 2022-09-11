@@ -10,5 +10,7 @@
 			"path": "../Blockchallenge-web"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"typescript.tsdk": "blockchallenge-3d\\node_modules\\typescript\\lib"
+	}
 }
