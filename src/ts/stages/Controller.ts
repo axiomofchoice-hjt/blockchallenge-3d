@@ -18,9 +18,10 @@ import Stage14 from "./Stage14";
 import Stage15 from "./Stage15";
 import Stage16 from "./Stage16";
 import Stage17 from "./Stage17";
+import Stage18 from "./Stage18";
 import { Cookie } from "../stageBase/Cookie";
 
-export const STAGE_COUNT = 18;
+export const STAGE_COUNT = 19;
 
 export class Controller {
     stages: any[];
@@ -47,7 +48,8 @@ export class Controller {
             Stage14,
             Stage15,
             Stage16,
-            Stage17
+            Stage17,
+            Stage18,
         ];
         console.assert(
             this.stages.length === STAGE_COUNT,
